@@ -1,0 +1,588 @@
+sap.ui.define([
+    "sap/m/MessageToast"
+],
+    function (MessageToast) {
+        "use strict";
+        return {
+
+            chatId: "",
+
+            api: "",
+
+            apiKey: "",
+
+            agentId: "",
+
+            _sidePanelControl: null,
+
+            setSidePanel(control) {
+
+                this._sidePanelControl = control;
+
+            },
+
+            getSidePanel() {
+
+                return this._sidePanelControl;
+
+            },
+
+            addUserMessage: function (message, seqno = 0, datetime = "", scroll = true) {
+                let timestamp = datetime;
+                if (datetime === "") {
+                    //timestamp = new Date().toLocaleString();
+                }
+                const container = document.querySelector('#aaic-chat-message-container');
+                if (!container) {
+                    return;
+                }
+                const div = document.createElement('div');
+                div.id = `aaic-chat-message-${seqno}`;
+                div.className = 'aaic-chat-message aaic-chat-user-message';
+                div.innerHTML = `
+            <div class="aaic-chat-message-bubble">
+                <p>${message}</p>
+            </div>
+            <div class="aaic-chat-message-timestamp">${timestamp}</div>
+            `;
+                container.appendChild(div);
+
+                // Render markdown for the new message
+                const p = div.querySelector('.aaic-chat-message-bubble p');
+                p.innerHTML = window.marked.parse(p.textContent);
+
+                // Scroll to the new message
+                if (scroll === true) {
+                    setTimeout(() => {
+                        const target = document.querySelector('.sapFSPSideContentInner');
+                        if (target) {
+                            target.scrollTo({
+                                top: target.scrollHeight,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }, 300);
+                }
+            },
+
+            addLlmMessage: function (message, seqno = 0, datetime = "", scroll = true) {
+                let timestamp = datetime;
+                if (datetime === "") {
+                    //timestamp = new Date().toLocaleString();
+                }
+                const container = document.querySelector('#aaic-chat-message-container');
+                if (!container) {
+                    return;
+                }
+                const div = document.createElement('div');
+                div.id = `aaic-chat-message-${seqno}`;
+                div.className = 'aaic-chat-message aaic-chat-llm-message';
+                div.innerHTML = `
+            <div class="aaic-chat-message-bubble">
+                <div class="markdown-content">${message}</div>
+            </div>
+            <div class="aaic-chat-message-timestamp">${timestamp}</div>
+            `;
+                container.appendChild(div);
+
+                // Render markdown for the new message
+                const markdownDiv = div.querySelector('.markdown-content');
+                markdownDiv.innerHTML = window.marked.parse(markdownDiv.textContent);
+
+                // Scroll to the new message
+                if (scroll === true) {
+                    setTimeout(() => {
+                        const target = document.querySelector('.sapFSPSideContentInner');
+                        if (target) {
+                            target.scrollTo({
+                                top: target.scrollHeight,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }, 300);
+                }
+
+            },
+
+            addLlmTyping: function() {
+                // Prevent multiple indicators
+                if (document.getElementById("aaic-chat-llm-typing")) return;
+                const container = document.querySelector("#aaic-chat-message-container");
+                const typingDiv = document.createElement("div");
+                typingDiv.id = "aaic-chat-llm-typing";
+                typingDiv.className = "aaic-chat-message aaic-chat-llm-message";
+                typingDiv.innerHTML = `
+                <div class="aaic-chat-message-bubble">
+                    <div class="aaic-chat-llm-typing">
+                    <div class="aaic-llm-typing-dot"></div>
+                    <div class="aaic-llm-typing-dot"></div>
+                    <div class="aaic-llm-typing-dot"></div>
+                    </div>
+                </div>
+                <div class="aaic-chat-message-timestamp"></div>
+                `;
+                container.appendChild(typingDiv);
+                // Scroll to the new message
+                if (scroll === true) {
+                    setTimeout(() => {
+                        const target = document.querySelector('.sapFSPSideContentInner');
+                        if (target) {
+                            target.scrollTo({
+                                top: target.scrollHeight,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }, 300);
+                }
+            },
+
+            /**
+             * Removes the LLM typing indicator from the message-container
+             */
+            removeLlmTyping: function() {
+                const typingDiv = document.getElementById("aaic-chat-llm-typing");
+                if (typingDiv) {
+                    typingDiv.remove();
+                }
+            },
+
+            addWelcomeMessage: function () {
+
+                this.addLlmMessage("Welcome to the **ABAP AI Chat!** How can I assist you today? 😊", 999999);
+
+            },
+
+            clear: function () {
+
+                this.chatId = '';
+
+                document.getElementById('aaic-chat-message-container').innerHTML = '';
+
+                this.addWelcomeMessage();
+
+                MessageToast.show("Chat cleared!");
+
+            },
+
+            getEndpoint: function (resource) {
+
+				let baseUrl = '/sap/bc/http/sap/YAAIC_HTTP_REST_HANDLER/';
+				let urlParams = '?sap-client=100&r=' + Date.now();
+
+				return baseUrl + resource + urlParams;
+
+			},
+
+            sendUserPromptAsync: async function(userPrompt, api, apikey, agentId = '') {
+
+                let taskId = "";
+                
+                let asyncChat = {
+                    chat_id: this.chatId,
+                    api: api,     
+                    api_key: apikey, 
+                    message: userPrompt, 
+                    context: '', 
+                    agent_id: agentId,
+                    model: ''   
+                };
+
+                let endpoint = this.getEndpoint('ASYNC_CHAT');
+
+                // Add the User prompt to the chat
+                this.addUserMessage(userPrompt);
+
+                this.addLlmTyping();
+
+                try {
+
+                    // Await the fetch call. This pauses execution until the response is received.
+                    const responseData = await this._fetchData(endpoint, {
+                        method: 'POST',
+                        body: JSON.stringify(asyncChat)
+                    });
+
+                    taskId = responseData.taskId;
+                    this.chatId = responseData.chatId;
+
+                    // Handle the successful data
+                    console.log(responseData);
+
+                } catch (error) {
+                    
+                    // Handle any errors during the fetch or parsing process
+                    console.error('Operation failed:', error);
+
+                    return;
+                    
+                }
+
+                if (taskId == "" || taskId == " ") {
+
+                    console.error('Operation failed!');
+
+                    return;
+                } 
+
+                // Poll for status until completed
+                let isCompleted = false;
+                let attempts = 0;
+                
+                const maxAttempts = 60; // Prevent infinite loops
+                
+                while (!isCompleted && attempts < maxAttempts) {
+                
+                    // Wait 2 seconds between checks
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    try {
+
+                        await this._loadChatMessages();
+
+                        // Check status
+                        let statusResponseData = await this._fetchData(endpoint + "&task_id=" + taskId);
+                    
+                        console.log(`Attempt ${attempts + 1}: Status is ${statusResponseData.status}`);
+                        
+                        if (statusResponseData.status.toUpperCase() === 'FINISHED') {
+                            isCompleted = true;
+                            console.log('Process completed!', statusResponseData);
+                            break;
+                        } else if (statusResponseData.status.toUpperCase() === 'FAILED') {
+                            console.error('Process failed!', statusResponseData);
+                            throw new Error('Process failed!');
+                        } else {
+                            this.addLlmTyping();
+                        }
+
+                    } catch (error) {
+                        
+                        this.removeLlmTyping();
+
+                        // Handle any errors during the fetch or parsing process
+                        console.error('Operation failed:', error);
+
+                        return;
+                    }
+                    
+                    attempts++;
+                }
+
+                await this._loadChatMessages();
+
+                this.removeLlmTyping();
+            },
+
+            resumeChat: async function(id = "") {
+
+                if (id !=="") {
+                  this.chatId = id;
+                }
+
+                if (this.chatId ==="") {
+                  return;
+                }
+
+                let container;
+
+                let attempts = 1;
+
+                while (!container) {
+                    
+                    // Wait 0.5 seconds between checks
+                    await new Promise(resolve => setTimeout(resolve, 500));
+
+                    container = document.getElementById('aaic-chat-message-container');
+                    
+                    attempts++;
+
+                    if (attempts > 5) {
+                        break;
+                    }
+                }
+
+                if (container) {
+                    container.innerHTML = '';    
+                }
+                
+
+                this._loadChatMessages();
+
+            },
+
+            //################ Private APIs ###################
+                        
+            _loadChatMessages: async function() {
+
+                const endpoint = this.getEndpoint('chat');
+
+                let responseData = {};
+
+                try {
+
+                    responseData = await this._fetchData(endpoint + "&id=" + this.chatId);
+
+                } catch (error) {
+                    
+                    // Handle any errors during the fetch or parsing process
+                    console.error('Operation failed:', error);
+
+                    return;
+                }
+
+                if (!responseData.chat || !responseData.chat.messages) {
+
+                    console.error('No response received');
+
+                    return;
+
+                }
+
+                let newChatMessages = [];
+
+                if (responseData.chat && responseData.chat.messages && Array.isArray(responseData.chat.messages)) {
+
+                    responseData.chat.messages.forEach(element => {
+
+                        let renderedChatMessage = document.getElementById(`aaic-chat-message-${element.seqno}`);
+
+                        if (!renderedChatMessage) {
+                            newChatMessages.push(element);
+                        }
+                        
+                    });
+
+                }
+
+                if (newChatMessages.length > 0) {
+                    //this.removeLlmTyping();
+                }
+
+                let tempUserMsg = document.getElementById(`aaic-chat-message-0`);
+
+                newChatMessages.forEach(newMessage => {
+
+                    let msg;
+
+                    switch (responseData.chat.api) {
+                        
+                        case 'OPENAI':
+                            
+                            msg = JSON.parse(newMessage.msg);
+
+                            try {
+                                const parsed = JSON.parse(msg.content);
+                                msg.content = parsed;
+                            } catch (error) {
+                                //No problem ...
+                            }
+
+                            if (msg.role.toLowerCase() === "user") {
+                                
+                                if (tempUserMsg) {
+                                    // Discard temporary user message rendered
+                                    tempUserMsg.remove();
+                                }
+
+                                this.removeLlmTyping();
+
+                                this.addUserMessage(msg.content, newMessage.seqno, this._getDateTime(newMessage.msgDate, newMessage.msgTime) );
+
+                            }
+
+                            if (msg.role.toLowerCase() === "assistant") {
+
+                                if (Array.isArray(msg.content)) {
+
+                                    msg.content.forEach(contentElement => {
+
+                                        if (element.type === "text") {
+
+                                            this.removeLlmTyping();
+
+                                            this.addLlmMessage(contentElement.text, newMessage.seqno );
+                                        }
+                                    
+                                    });
+
+                                } else {
+
+                                    this.removeLlmTyping();
+
+                                    this.addLlmMessage(msg.content, newMessage.seqno, this._getDateTime(newMessage.msgDate, newMessage.msgTime) );
+                                }
+                            }
+
+                            break;
+                        
+                        case 'ANTHROPIC':
+
+                            msg = JSON.parse(newMessage.msg);
+
+                            try {
+                                const parsed = JSON.parse(msg.content);
+                                msg.content = parsed;
+                            } catch (error) {
+                                //No problem ...
+                            }
+
+                            if (msg.role.toLowerCase() === "user") {
+
+                                if (Array.isArray(msg.content)) {
+                                
+                                    msg.content.forEach(contentElement => {
+
+                                        if (contentElement.type === "text") {
+                                            
+                                            if (tempUserMsg) {
+                                                // Discard temporary user message rendered
+                                                tempUserMsg.remove();
+                                            }
+
+                                            this.removeLlmTyping();
+
+                                            this.addUserMessage(msg.contentElement.text , newMessage.seqno, this._getDateTime(newMessage.msgDate, newMessage.msgTime) );
+
+                                        }
+                                    
+                                    });
+
+                                } else {
+
+                                    if (tempUserMsg) {
+                                        // Discard temporary user message rendered
+                                        tempUserMsg.remove();
+                                    }
+
+                                    this.removeLlmTyping();
+
+                                    this.addUserMessage(msg.content , newMessage.seqno, this._getDateTime(newMessage.msgDate, newMessage.msgTime) );
+
+                                }
+                            }
+
+                            if (msg.role.toLowerCase() === "assistant") {
+
+                                if (Array.isArray(msg.content)) {
+
+                                    msg.content.forEach(contentElement => {
+
+                                        if (contentElement.type === "text") {
+
+                                            this.removeLlmTyping();
+
+                                            this.addLlmMessage(contentElement.text, newMessage.seqno, this._getDateTime(newMessage.msgDate, newMessage.msgTime) );
+                                        }
+                                    
+                                    });
+
+                                } else {
+
+                                    this.removeLlmTyping();
+
+                                    this.addLlmMessage(msg.content, newMessage.seqno, this._getDateTime(newMessage.msgDate, newMessage.msgTime) );
+
+                                }
+                            }
+
+                            break;
+
+                        case 'GOOGLE':
+
+                            msg = JSON.parse(newMessage.msg);
+
+                            try {
+                                const parsed = JSON.parse(msg.content);
+                                msg.content = parsed;
+                            } catch (error) {
+                                //No problem ...
+                            }
+
+                            if (msg.role.toLowerCase() === "user") {
+
+                                if (Array.isArray(msg.parts)) {
+                                
+                                    msg.parts.forEach(part => {
+
+                                        if (part.text) {
+                                            
+                                            if (tempUserMsg) {
+                                                // Discard temporary user message rendered
+                                                tempUserMsg.remove();
+                                            }
+
+                                            this.removeLlmTyping();
+
+                                            this.addUserMessage(part.text , newMessage.seqno, this._getDateTime(newMessage.msgDate, newMessage.msgTime) );
+
+                                        }
+                                    
+                                    });
+                                } 
+                            }
+
+                            if (msg.role.toLowerCase() === "model") {
+
+                                if (Array.isArray(msg.parts)) {
+
+                                    msg.parts.forEach(part => {
+
+                                        if (part.text) {
+
+                                            this.removeLlmTyping();
+
+                                            this.addLlmMessage(part.text, newMessage.seqno, this._getDateTime(newMessage.msgDate, newMessage.msgTime) );
+                                        }
+                                    
+                                    });
+
+                                }
+                            }
+
+                        default:
+                            break;
+                    }
+
+                });
+
+            },
+
+            _fetchData: async function (url, options = {}) {
+
+				const defaultOptions = {
+					method: 'GET',
+					headers: {
+						'Cache-Control': 'no-cache',
+						'Pragma': 'no-cache',
+						'Content-Type': 'application/json'
+					},
+					...options
+				};
+
+				try {
+					const response = await fetch(url, defaultOptions);
+
+					if (!response.ok) {
+						throw new Error(`HTTP error! status: ${response.status}`);
+					}
+
+					// Handle different response types
+					const contentType = response.headers.get('content-type');
+					if (contentType && contentType.includes('application/json')) {
+						return await response.json();
+					} else {
+						return await response.text();
+					}
+				} catch (error) {
+					console.error('Error fetching data:', error);
+					throw error;
+				}
+			},
+
+            _getDateTime: function (msgDate, msgTime) {
+                const [year, month, day] = msgDate.split('-');
+                return `${day}/${month}/${year} ${msgTime}`;
+            }
+            
+        };
+    });

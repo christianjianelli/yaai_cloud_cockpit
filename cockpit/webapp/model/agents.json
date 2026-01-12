@@ -1,0 +1,90 @@
+{
+    "agents": [
+        {
+            "id": "7EA3422BA1AC1FE0AE835528E8F90C68",
+            "name": "travel-fiori-ai-assistant",
+            "description": "Travel Fiori App AI Assistant",
+            "system_instructions_id": "2A9448FCE52F1FD0AD850377D753B845",
+            "system_instructions_filename": "travel-agency-fiori-app-llm-si.md",
+            "rag_context_id": "7EA3422BA1AC1FE0AD8503D109246C64",
+            "rag_context_filename": "travel-agency-fiori-app-doc.md",
+            "prompt_template": "**User message**: %USER_MESSAGE% \n\n**Context**:\n\n %CONTEXT% \n\n",
+            "tools": [
+                {
+                    "class_name": "ycl_aaic_rag_tools",
+                    "method_name": "get_documentation",
+                    "proxy_class_name": "",
+                    "tool_description": "Use this method to get relevant documentation.",
+                    "load_on_demand": false
+                },
+                {
+                    "class_name": "ycl_aaic_func_call_tools",
+                    "method_name": "get_available_tools",
+                    "proxy_class_name": "",
+                    "tool_description": "Use this method to retrieve the list of available tools.",
+                    "load_on_demand": false
+                },
+                {
+                    "class_name": "ycl_aaic_func_call_tools",
+                    "method_name": "request_tools",
+                    "proxy_class_name": "",
+                    "tool_description": "Use this method to request the json schema of the tools.",
+                    "load_on_demand": false
+                }
+            ]
+        },{
+            "id": "7EA3422BA1AC1FE0AE835528E8F90C68",
+            "name": "math-ai-assistant",
+            "description": "Mathematical Operations AI Assistant",
+            "system_instructions_id": "2A9448FCE52F1FD0AF9A420C631E584C",
+            "system_instructions_filename": "system-instructions-math-agent.md",
+            "rag_context_id": "",
+            "rag_context_filename": "",
+            "prompt_template": "",
+            "tools": [
+                {
+                    "class_name": "ycl_aaic_func_call_tools",
+                    "method_name": "get_available_tools",
+                    "proxy_class_name": "",
+                    "tool_description": "Use this method to retrieve the list of available tools.",
+                    "load_on_demand": false
+                },
+                {
+                    "class_name": "ycl_aaic_func_call_tools",
+                    "method_name": "request_tools",
+                    "proxy_class_name": "",
+                    "tool_description": "Use this method to request the json schema of the tools.",
+                    "load_on_demand": false
+                },
+                {
+                    "class_name": "zcl_aaic_math_tools",
+                    "method_name": "add",
+                    "proxy_class_name": "zcl_aaic_math_tools_proxy",
+                    "tool_description": "Use this method to add two numbers (i_num1 + i_num2)",
+                    "load_on_demand": true
+                },
+                {
+                    "class_name": "zcl_aaic_math_tools",
+                    "method_name": "multiply",
+                    "proxy_class_name": "zcl_aaic_math_tools_proxy",
+                    "tool_description": "Use this method to multiply two numbers (i_num1 * i_num2)",
+                    "load_on_demand": true
+                },
+                {
+                    "class_name": "zcl_aaic_math_tools",
+                    "method_name": "subtract",
+                    "proxy_class_name": "zcl_aaic_math_tools_proxy",
+                    "tool_description": "Use this method to subtract two numbers (i_num1 - i_num2)",
+                    "load_on_demand": true
+                },
+                {
+                    "class_name": "zcl_aaic_math_tools",
+                    "method_name": "divide",
+                    "proxy_class_name": "zcl_aaic_math_tools_proxy",
+                    "tool_description": "Use this method to divide two numbers (i_num1 / i_num2)",
+                    "load_on_demand": true
+                }
+            ]
+        }
+    ]
+}

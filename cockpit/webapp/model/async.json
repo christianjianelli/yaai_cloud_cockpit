@@ -1,0 +1,70 @@
+{
+    "tasks": [
+        {
+            "id": "BA9546FF9FB61FE0B0A63973E68F686D",
+            "chat_id": "BA9546FF9FB61FE0B0A63973E68F486D",
+            "name": "Test Task",
+            "status": "Finished",
+            "username": "CB9980000034",
+            "startdate": "2025-11-14",
+            "starttime": "10:00:00",
+            "enddate": "2025-11-14",
+            "endtime": "11:00:00"
+        },
+        {
+            "id": "CA1234FF9FB61FE0B0A63973E68F797E",
+            "chat_id": "CA1234FF9FB61FE0B0A63973E68F597E",
+            "name": "Data Migration",
+            "status": "Running",
+            "username": "CB9980000035",
+            "startdate": "2025-11-20",
+            "starttime": "09:30:00",
+            "enddate": "",
+            "endtime": ""
+        },
+        {
+            "id": "DB5678FF9FB61FE0B0A63973E68F808F",
+            "chat_id": "DB5678FF9FB61FE0B0A63973E68F608F",
+            "name": "System Update",
+            "status": "Created",
+            "username": "CB9980000036",
+            "startdate": "2025-11-21",
+            "starttime": "14:00:00",
+            "enddate": "",
+            "endtime": ""
+        },
+        {
+            "id": "EC9012FF9FB61FE0B0A63973E68F919G",
+            "chat_id": "EC9012FF9FB61FE0B0A63973E68F719G",
+            "name": "Log Analysis",
+            "status": "Failed",
+            "username": "CB9980000034",
+            "startdate": "2025-11-19",
+            "starttime": "16:45:00",
+            "enddate": "2025-11-19",
+            "endtime": "16:50:00"
+        },
+        {
+            "id": "EC9012FF9FB61FE0B0A63973E68F919G",
+            "chat_id": "EC9012FF9FB61FE0B0A63973E68F719G",
+            "name": "Log Analysis",
+            "status": "Paused",
+            "username": "CB9980000034",
+            "startdate": "2025-11-19",
+            "starttime": "16:45:00",
+            "enddate": "2025-11-19",
+            "endtime": "16:50:00"
+        },
+        {
+            "id": "EC9012FF9FB61FE0B0A63973E68F919G",
+            "chat_id": "EC9012FF9FB61FE0B0A63973E68F719G",
+            "name": "Log Analysis",
+            "status": "Cancelled",
+            "username": "CB9980000034",
+            "startdate": "2025-11-19",
+            "starttime": "16:45:00",
+            "enddate": "2025-11-19",
+            "endtime": "16:50:00"
+        }
+    ]
+}

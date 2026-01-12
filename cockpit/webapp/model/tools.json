@@ -1,0 +1,28 @@
+{
+    "tools": [
+        {
+            "class_name": "zcl_aaic_math_tools",
+            "method_name": "add",
+            "proxy_class_name": "zcl_aaic_math_tools_proxy",
+            "tool_description": "Use this method to add two numbers (i_num1 + i_num2)"
+        },
+        {
+            "class_name": "zcl_aaic_math_tools",
+            "method_name": "multiply",
+            "proxy_class_name": "zcl_aaic_math_tools_proxy",
+            "tool_description": "Use this method to multiply two numbers (i_num1 * i_num2)"
+        },
+        {
+            "class_name": "zcl_aaic_math_tools",
+            "method_name": "subtract",
+            "proxy_class_name": "zcl_aaic_math_tools_proxy",
+            "tool_description": "Use this method to subtract two numbers (i_num1 - i_num2)"
+        },
+        {
+            "class_name": "zcl_aaic_math_tools",
+            "method_name": "divide",
+            "proxy_class_name": "zcl_aaic_math_tools_proxy",
+            "tool_description": "Use this method to divide two numbers (i_num1 / i_num2)"
+        }
+    ]
+}

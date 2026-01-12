@@ -1,0 +1,32 @@
+{
+    "chats": [
+        {
+            "id": "2A9448FCE52F1FD0AFBF9A1955E3D84D",
+            "api": "OPENAI",
+            "username": "CB9980000034",
+            "chat_date": "20251107",
+            "chat_time": "07:05:09"
+        },
+        {
+            "id": "2A9448FCE52F1FD0AFBF9A1955E3D85D",
+            "api": "GOOGLE",
+            "username": "CB9980000034",
+            "chat_date": "20251107",
+            "chat_time": "07:15:09"
+        },
+        {
+            "id": "2A9448FCE52F1FD0AFBF9A1955E3D86D",
+            "api": "ANTHROPIC",
+            "username": "CB9980000034",
+            "chat_date": "20251107",
+            "chat_time": "07:25:19"
+        },
+        {
+            "id": "2A9448FCE52F1FD0AFBF9A1955E3D87D",
+            "api": "MISTRAL",
+            "username": "CB9980000034",
+            "chat_date": "20251107",
+            "chat_time": "07:35:19"
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "id": "2A9448FCE52F1FD0AFBF9A1955E3D84D",
+    "api": "OPENAI",
+    "username": "CB9980000034",
+    "chat_date": "20251107",
+    "chat_time": "07:05:09",
+    "messages": [
+        {
+            "id": "2A9448FCE52F1FD0AFBF9A1955E3D84D",
+            "seqno": "1",
+            "message": "{\"role\":\"user\",\"content\":\"Hi there! Could you please tell me what is the result of 71 * 31?\"}",
+            "message_date": "20251107",
+            "message_time": "07:05:19"
+        },
+        {
+            "id": "2A9448FCE52F1FD0AFBF9A1955E3D84D",
+            "seqno": "2",
+            "message": "{\"role\":\"assistant\",\"content\":\"The result of 71 * 31 is 2191.\"}",
+            "message_date": "20251107",
+            "message_time": "07:05:29"
+        }
+    ]
+}

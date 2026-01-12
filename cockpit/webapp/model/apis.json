@@ -1,0 +1,24 @@
+{
+    "apis": [
+        {
+            "id": "OPENAI",
+            "baseUrl": "https://api.openai.com",
+            "models": []
+        },
+        {
+            "id": "ANTHROPIC",
+            "baseUrl": "https://api.anthropic.com",
+            "models": []
+        },
+        {
+            "id": "GOOGLE",
+            "baseUrl": "https://generativelanguage.googleapis.com",
+            "models": []
+        },
+        {
+            "id": "MISTRAL",
+            "baseUrl": "https://api.mistral.ai",
+            "models": []
+        }
+    ]
+}

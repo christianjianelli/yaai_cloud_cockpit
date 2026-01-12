@@ -1,0 +1,70 @@
+{
+	"navigation": [
+		{
+			"title": "Home",
+			"icon": "sap-icon://home",
+			"key": "home"
+		},
+		{
+			"title": "LLM APIs",
+			"icon": "sap-icon://ai",
+			"expanded": true,
+			"key": "apis",
+			"items": [
+				{
+					"title": "OpenAI",
+					"key": "openai-api"
+				},
+				{
+					"title": "Anthropic",
+					"key": "anthropic-api"
+				},
+				{
+					"title": "Google Gemini",
+					"key": "google-api"
+				},
+				{
+					"title": "Mistral",
+					"key": "mistral-api"
+				}
+			]
+		},
+		{
+			"title": "Tools",
+			"icon": "sap-icon://syntax",
+			"key": "tools"
+		},
+		{
+			"title": "Documents (RAG)",
+			"icon": "sap-icon://documents",
+			"key": "documents"
+		},
+		{
+			"title": "Agents",
+			"icon": "sap-icon://enablement",
+			"key": "agents"
+		},
+		{
+			"title": "Chats",
+			"icon": "sap-icon://discussion",
+			"key": "chats"
+		},
+		{
+			"title": "Logs",
+			"icon": "sap-icon://command-line-interfaces",
+			"key": "logs"
+		},
+		{
+			"title": "Async Tasks",
+			"icon": "sap-icon://future",
+			"key": "async-tasks"
+		}				
+	],
+	"fixedNavigation": [
+		{
+			"title": "Documentation",
+			"icon": "sap-icon://e-learning"
+		}
+	],
+	"selectedKey": "home"
+}

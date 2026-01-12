@@ -1,0 +1,24 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<SelectDialog id="_IDToolValueHelpSelectDialog"
+		noDataText="No Tools Found"
+		title="Select Tool"
+		search=".onSearchTool"
+		searchPlaceholder="Search Documents"
+		confirm=".onToolValueHelpDialogClose"
+		cancel=".onToolValueHelpDialogClose"
+		showClearButton="true"
+		items="{
+			path: 'tools>/tools',
+			sorter: {
+				path: 'className',
+				descending: false
+			}
+		}">
+		<StandardListItem id="_IDToolValueHelpStandardListItem"
+			title="{tools>className}->{tools>methodName}"
+			description="{tools>description}"
+			type="Active" />
+	</SelectDialog>
+</core:FragmentDefinition>
