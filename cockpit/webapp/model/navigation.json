@@ -63,7 +63,8 @@
 	"fixedNavigation": [
 		{
 			"title": "Documentation",
-			"icon": "sap-icon://e-learning"
+			"icon": "sap-icon://learning-assistant",
+			"key": "documentation"
 		}
 	],
 	"selectedKey": "home"

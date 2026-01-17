@@ -6,8 +6,11 @@ sap.ui.define([
     "sap/ui/core/Messaging",
     "sap/ui/core/message/Message",
     "sap/ui/core/message/MessageType",
-    "sap/m/MessageBox"
-], (BaseController, UIComponent, IllustratedMessage, IllustratedMessageType, Messaging, Message, MessageType, MessageBox) => {
+    "sap/m/MessageBox",
+    "sap/m/Dialog",
+    "sap/m/Button",
+    "sap/m/Text"
+], (BaseController, UIComponent, IllustratedMessage, IllustratedMessageType, Messaging, Message, MessageType, MessageBox, Dialog, Button, Text) => {
     "use strict";
 
     return BaseController.extend("aaic.cockpit.controller.AsyncTasks", {
@@ -109,6 +112,60 @@ sap.ui.define([
 
         },
 
+        onCancel: async function (event) {
+
+            const view = this.getView();
+            
+            const resourceBundle = view.getModel("i18n").getResourceBundle();
+            
+            const table = view.byId("_IDAsyncTasksTable");
+            
+            let selectedItems = [];
+
+            if (table) {
+                selectedItems = table.getSelectedItems();
+            }
+
+            if (selectedItems.length === 0) {
+                return;
+            }
+
+            if (!this._confirmDialog) {
+                    
+                this._confirmDialog = new Dialog({
+                    id: "_IDAsyncTasksConfirmDialog",
+                    type: "Message",
+                    title: resourceBundle.getText("confirm"),
+                    content: new Text({ text: resourceBundle.getText("confirmCancelAsyncTasks") }),
+                    beginButton: new Button({
+                        type: "Emphasized",
+                        text: resourceBundle.getText("yes"),
+                        press: async function () {         
+                            this._confirmDialog.setBusy(true);              
+                            for (const item of selectedItems) {
+                                const asyncTaskId = item.getBindingContext("async").getProperty("id")
+                                await this._cancel(asyncTaskId);
+                            }
+                            if (table) {
+                                table.removeSelections();
+                            }                           
+                            this._confirmDialog.setBusy(false);
+                            this._confirmDialog.close();
+                        }.bind(this)
+                    }),
+                    endButton: new Button({
+                        text: resourceBundle.getText("cancel"),
+                        press: function () {
+                            this._confirmDialog.close();
+                        }.bind(this)
+                    })
+                });
+            }
+
+            this._confirmDialog.open();
+
+        },
+
         //################ Private APIs ###################
 
         _loadData: async function(username) {
@@ -147,6 +204,77 @@ sap.ui.define([
                 
                 Messaging.addMessages(message);
 
+            }
+
+        },
+
+        _cancel: async function(asyncTaskId) {
+
+            const view = this.getView();
+
+            const model = view.getModel("async");
+            
+            const modelData = model.getData();
+            
+            const endpoint = this.getEndpoint('async_task');
+
+            const formData = new FormData();
+
+            // Fill form data
+            formData.append('async_task_id', asyncTaskId);
+            formData.append('action', 'cancel');
+                        
+            try {
+
+                // 1. Await the fetch call. This pauses execution until the response is received.
+                const response = await fetch(endpoint, {
+                    method: 'PUT',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    // Throw an error to be caught by the catch block
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // 2. Await the response.json() call to parse the body.
+                const responseData = await response.json();
+
+                // 3. Handle the successful data
+                if (responseData.updated) {
+
+                    console.log('Async Task Id ' + asyncTaskId + ' cancelled.');
+
+                    for (const task of modelData.tasks) {
+                            
+                        if (task.id === asyncTaskId) {
+                            
+                            task.cancelled = true;
+
+                            break;
+
+                        }
+                    }
+
+                    model.setData(modelData);
+
+                } else {
+
+                    const message = new Message({
+                        message: 'Async Task Id ' + asyncTaskId + ' NOT cancelled.',
+                        description: responseData.error,
+                        type: MessageType.Error
+                    });
+                
+                    Messaging.addMessages(message);
+
+                }
+    
+            } catch (error) {
+                
+                // 4. Handle any errors during the fetch or parsing process
+                console.error('Async Task cancel operation failed:', error);
+                
             }
 
         }

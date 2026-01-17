@@ -21,8 +21,15 @@ sap.ui.define([
             },
 
             createSettingsModel: function () {
-                const oModel = new JSONModel(sap.ui.require.toUrl("aaic/cockpit/model/settings.json"));
-                oModel.setDefaultBindingMode("OneWay");
+                const storedUserSettings = JSON.parse(localStorage.getItem('userSettings'));
+                let oModel;                
+                if (storedUserSettings) {
+                    oModel = new JSONModel();
+                    oModel.setData(storedUserSettings);
+                } else {
+                    oModel = new JSONModel(sap.ui.require.toUrl("aaic/cockpit/model/settings.json"));
+                }
+                oModel.setDefaultBindingMode("TwoWay");
                 return oModel;
             },
 

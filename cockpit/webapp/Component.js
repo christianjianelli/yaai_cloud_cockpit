@@ -38,6 +38,8 @@ sap.ui.define([
 
             Localization.setLanguage("en")
 
+            //sap.ui.getCore().applyTheme("sap_horizon_dark");
+
             // set the device model
             this.setModel(models.createDeviceModel(), "device");
 
@@ -49,8 +51,11 @@ sap.ui.define([
 
             // set the settings model
             this.setModel(models.createSettingsModel(), "settings");
+
+            // set the userinfo model
+            this.setModel(models.createJSONModel("OneWay"), "userinfo");
             
-            // set the Stats model
+            // set the stats model
             this.setModel(models.createJSONModel("OneWay"), "stats");
 
             // set the apis model

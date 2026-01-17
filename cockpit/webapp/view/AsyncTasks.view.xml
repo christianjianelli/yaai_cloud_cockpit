@@ -71,7 +71,6 @@
                         <Title id="_IDAsyncTasksOverflowToolbarTitle" text="{i18n>tasks}" level="H2"/>
                         <ToolbarSpacer id="_IDAsyncTasksOverflowToolbarToolbarSpacer"/>
                         <Button id="_IDAsyncTasksButtonCancel" class="sapUiTinyMarginEnd" type="Default" icon="sap-icon://cancel" text="{i18n>cancel}" enabled="true" press=".onCancel"/>
-                        <Button id="_IDAsyncTasksButtonDelete" class="sapUiTinyMarginEnd" type="Reject" icon="sap-icon://delete" text="{i18n>delete}" enabled="true" press=".onDelete"/>
                     </OverflowToolbar>
                 </headerToolbar>
                 <columns>
@@ -95,6 +94,9 @@
                     </Column>
                     <Column id="_IDAsyncTasksColumnTime" importance="High">
                         <Text id="_IDAsyncTasksColumnTextTime" text="{i18n>startTime}" />
+                    </Column>
+                    <Column id="_IDAsyncTasksColumnCancelled" importance="High">
+                        <Text id="_IDAsyncTasksColumnTextCancelled" text="{i18n>cancelled}" />
                     </Column>
                 </columns>
                 <items>
@@ -134,6 +136,7 @@
                             <Text id="_IDAsyncTasksTextUsername" text="{async>username}" />
                             <Text id="_IDAsyncTasksTextDate" text="{async>startDate}" />
                             <Text id="_IDAsyncTasksTextTime" text="{async>startTime}" />
+                            <CheckBox id="_IDAsyncTasksCheckboxCancelled" selected="{async>cancelled}" editable="false" />
                         </cells>
                     </ColumnListItem>
                 </items>

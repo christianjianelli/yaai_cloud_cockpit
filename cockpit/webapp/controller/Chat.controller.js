@@ -143,13 +143,7 @@ sap.ui.define([
         },
 
         onResumeChat: function(event) {
-
-            /*
-            const component = this.getOwnerComponent();
-
-            const sidePanel = component.getSidePanel();
-            */
-            
+          
             const sidePanel = Chat.getSidePanel();
 
             if (sidePanel) {
@@ -159,7 +153,15 @@ sap.ui.define([
                 const apiInput = view.byId("_IDChatApiInput");
 
                 if (apiInput) {
+                    
                     Chat.api = apiInput.getValue();
+
+                    const selectApiControl = Chat.getSelectApiControl();
+
+                    if (selectApiControl) {
+                        selectApiControl.setSelectedKey(Chat.api);
+                    }
+
                 }
                 
                 sidePanel.setActionBarExpanded(true);

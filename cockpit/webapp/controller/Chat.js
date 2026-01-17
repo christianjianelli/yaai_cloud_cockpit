@@ -15,6 +15,8 @@ sap.ui.define([
 
             _sidePanelControl: null,
 
+            _selectApiControl: null,
+
             setSidePanel(control) {
 
                 this._sidePanelControl = control;
@@ -24,6 +26,18 @@ sap.ui.define([
             getSidePanel() {
 
                 return this._sidePanelControl;
+
+            },
+
+            setSelectApiControl(control) {
+
+                this._selectApiControl = control;
+
+            },
+
+            getSelectApiControl() {
+
+                return this._selectApiControl;
 
             },
 

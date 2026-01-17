@@ -6,8 +6,9 @@ sap.ui.define(
     "sap/ui/core/Messaging",
     "sap/ui/core/message/Message",
 	  "sap/ui/core/message/MessageType",
-    "sap/m/MessageBox"
-  ], (BaseController, Chat, UIComponent, Messaging, Message, MessageType, MessageBox) => {
+    "sap/m/MessageBox",
+    "sap/ui/core/Fragment"
+  ], (BaseController, Chat, UIComponent, Messaging, Message, MessageType, MessageBox, Fragment) => {
     "use strict";
 
     return BaseController.extend("aaic.cockpit.controller.App", {
@@ -20,13 +21,42 @@ sap.ui.define(
 
         const sidePanel = view.byId("_IDAppSidePanel");
 
+        const selectApiControl = view.byId("_IDAppSelectApi");
+
         const sideNavigation = view.byId("_IDAppSideNavigation");
 
         const ownerComponent = this.getOwnerComponent();
 
-        ownerComponent.setSideNavigation(sideNavigation);
+        if (sideNavigation) {
+          ownerComponent.setSideNavigation(sideNavigation);
+        }
+        
+        if (selectApiControl) {
+          Chat.setSelectApiControl(selectApiControl);
+        }
 
         Chat.setSidePanel(sidePanel);
+
+        const model = ownerComponent.getModel("settings");
+
+        const modelData = model.getData();
+
+        if (modelData.DefaultAPI) {
+          Chat.api = modelData.DefaultAPI;
+        }
+
+        if (modelData.DefaultAgentId) {
+          Chat.agentId = modelData.DefaultAgentId;
+        }
+
+        this._loadUserInfo();
+
+      },
+
+      onBeforeRendering() {
+
+        this._loadApis();
+        
       },
 
       onAfterRenderingHTMLControl: function (event) {
@@ -135,6 +165,10 @@ sap.ui.define(
             ownerComponent.setOnHoldNavigation("RouteAsyncTasks");
             break;
 
+          case "documentation":
+            window.open("https://github.com/christianjianelli/yaai_cloud_cockpit");  
+            break;
+            
           default:
             break;
         }
@@ -317,6 +351,52 @@ sap.ui.define(
 
       },
 
+      onDisplayUserInfo: async function (event) {
+        
+        // Create popover lazily
+        this.UserInfoPopover ??= await this.loadFragment({
+          name: "aaic.cockpit.fragment.UserInfo",
+          controller: this
+        });
+
+			  this.UserInfoPopover.openBy(event.getSource());
+
+      },
+
+      onCloseUserInfo: function(event) {
+        this.UserInfoPopover.close();
+			},
+
+      onDisplayUserSettings: async function (event) {
+
+        this._loadApis();
+        
+        // Create popover lazily
+        this.UserSettingsDialog ??= await this.loadFragment({
+          name: "aaic.cockpit.fragment.UserSettings",
+          controller: this
+        });
+
+			  this.UserSettingsDialog.openBy(event.getSource());
+
+      },
+
+      onSaveUserSettings: function(event) {
+
+        const view = this.getView();
+
+        const model = view.getModel("settings");
+
+        // Convert to string before storing
+        localStorage.setItem('userSettings', JSON.stringify(model.getData()));
+
+        this.UserSettingsDialog.close();
+			},
+
+      onCloseUserSettings: function(event) {
+        this.UserSettingsDialog.close();
+			},
+
       //################ Private APIs ###################
 
       _loadApis: async function () {
@@ -389,6 +469,24 @@ sap.ui.define(
           
         }
 
+      },
+
+      _loadUserInfo: async function () {
+        
+        const userInfo = await this.fetchData('/sap/bc/ui2/start_up');
+
+        const view = this.getView();
+
+        const model = view.getModel("userinfo");
+
+        model.setData({
+          email: userInfo.email,
+          username: userInfo.fullName,
+          userid: userInfo.id,
+          initials: userInfo.email.slice(0, 2).toUpperCase()
+        });
+
       }
+       
     });
   });

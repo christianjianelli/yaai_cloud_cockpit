@@ -10,6 +10,7 @@
                 class="sapUiSmallMargin" 
                 header="{i18n>openai}"
 		        subheader="{i18n>apiSettings}" 
+                backgroundImage="images/white_bg.svg"
                 press="onApiTilePress('OPENAI')">
                 <TileContent id="_IDMainTileContentOpenAI">
                     <ImageContent id="_IDMainImageContentOpenAI" src="images/openai_logo_small.png" />
@@ -20,6 +21,7 @@
                 class="sapUiSmallMargin" 
                 header="{i18n>anthropic}"
 		        subheader="{i18n>apiSettings}" 
+                backgroundImage="images/white_bg.svg"
                 press="onApiTilePress('ANTHROPIC')">
                 <TileContent id="_IDMainTileContentAnthropic">
                     <ImageContent id="_IDMainImageContentAnthropic" src="images/anthropic_logo_small.png" />
@@ -30,6 +32,7 @@
                 class="sapUiSmallMargin" 
                 header="{i18n>googlegemini}"
 		        subheader="{i18n>apiSettings}" 
+                backgroundImage="images/white_bg.svg"
                 press="onApiTilePress('GOOGLE')">
                 <TileContent id="_IDMainTileContentGoogle">
                     <ImageContent id="_IDMainImageContentGoogle" src="images/google_gemini_logo_small.png" />
@@ -40,6 +43,7 @@
                 class="sapUiSmallMargin" 
                 header="{i18n>mistral}"
 		        subheader="{i18n>apiSettings}" 
+                backgroundImage="images/white_bg.svg"
                 press="onApiTilePress('MISTRAL')">
                 <TileContent id="_IDMainTileContentMistral">
                     <ImageContent id="_IDMainImageContentMistral" src="images/mistral_logo_small.png" />
@@ -48,8 +52,9 @@
             <GenericTile 
                 id="_IDMainGenericTileTools" 
                 class="sapUiSmallMargin" 
-                header="{i18n>agentTools}" 
+                header="{i18n>tools}" 
                 frameType="OneByOne" 
+                backgroundImage="images/white_bg.svg"
                 press="onTilePress('RouteTools')">
                 <TileContent id="_IDMainTileContentTools">
                     <FeedContent id="_IDMainFeedContentTools" 
@@ -62,6 +67,7 @@
                 class="sapUiSmallMargin" 
                 header="{i18n>ragDocuments}" 
                 frameType="OneByOne" 
+                backgroundImage="images/white_bg.svg"
                 press="onTilePress('RouteDocuments')">
                 <TileContent id="_IDMainTileContentDocuments">
                     <FeedContent id="_IDMainFeedContentDocuments" 
@@ -74,6 +80,7 @@
                 class="sapUiSmallMargin" 
                 header="{i18n>agents}"
                 frameType="OneByOne"
+                backgroundImage="images/white_bg.svg"
                 press="onTilePress('RouteAgents')">
                 <TileContent id="_IDMainTileContentAgents">
                     <FeedContent id="_IDMainFeedContentAgents" 
@@ -86,6 +93,7 @@
                 class="sapUiSmallMargin" 
                 header="{i18n>chats}" 
                 frameType="OneByOne" 
+                backgroundImage="images/white_bg.svg"
                 press="onTilePress('RouteChats')">
                 <TileContent id="_IDMainTileContentChats">
                     <FeedContent id="_IDMainFeedContentChats" 
@@ -98,6 +106,7 @@
                 class="sapUiSmallMargin" 
                 header="{i18n>logs}" 
                 frameType="OneByOne" 
+                backgroundImage="images/white_bg.svg"
                 press="onTilePress('RouteLogs')">
                 <TileContent id="_IDMainTileContentLogs">
                     <FeedContent id="_IDMainFeedContentLogs" 
@@ -110,6 +119,7 @@
                 class="sapUiSmallMargin" 
                 header="{i18n>asyncTasks}" 
                 frameType="OneByOne" 
+                backgroundImage="images/white_bg.svg"
                 press="onTilePress('RouteAsyncTasks')">
                 <TileContent id="_IDMainTileContentAsyncTasks">
                     <FeedContent id="_IDMainFeedContentAsyncTasks" 

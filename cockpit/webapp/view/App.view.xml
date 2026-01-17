@@ -19,30 +19,13 @@
 					</layoutData>
 				</Button>
 				<core:Icon id="_IDAppIcon" src="sap-icon://ai"></core:Icon>
-                <Title level="H1" text="{i18n>title}" wrapping="false" id="productName">
-					<layoutData>
-						<OverflowToolbarLayoutData id="_IDAppOverflowToolbarLayoutData1" priority="Disappear"/>
-					</layoutData>
-				</Title>
+                <Title level="H1" text="{i18n>title}" wrapping="false" id="productName" />
 				<ToolbarSpacer id="_IDAppToolbarSpacer" />
-				<ToolbarSeparator id="_IDAppToolbarSeparator">
-					<layoutData>
-						<OverflowToolbarLayoutData id="_IDAppOverflowToolbarLayoutData6" group="2"/>
-					</layoutData>
-				</ToolbarSeparator>
-				<OverflowToolbarButton id="_IDAppOverflowToolbarButton2" icon="sap-icon://action-settings" type="Transparent" text="Settings"/>
-				<Button id="_IDAppButton" icon="sap-icon://bell" type="Transparent" tooltip="Notification">
-					<layoutData>
-						<OverflowToolbarLayoutData id="_IDAppOverflowToolbarLayoutData7" priority="NeverOverflow"/>
-					</layoutData>
-				</Button>
+				<ToolbarSeparator id="_IDAppToolbarSeparator" />
+				<OverflowToolbarButton id="_IDAppOverflowToolbarButton2" icon="sap-icon://action-settings" type="Transparent" text="Settings" press=".onDisplayUserSettings"/>
 				<tnt:ToolHeaderUtilitySeparator id="_IDAppToolHeaderUtilitySeparator"/>
 				<ToolbarSpacer id="_IDAppToolbarSpacer1" width="1.125rem"/>
-				<Avatar id="_IDAppAvatar" initials="CS" displaySize="XS" tooltip="Profile">
-					<layoutData>
-						<OverflowToolbarLayoutData id="_IDAppOverflowToolbarLayoutData8" priority="NeverOverflow"/>
-					</layoutData>
-				</Avatar>
+				<Avatar id="_IDAppAvatar" initials="{userinfo>/initials}" displaySize="XS" press=".onDisplayUserInfo" />
             </tnt:ToolHeader>
 		</tnt:header>
 		<tnt:sideContent>
@@ -67,7 +50,7 @@
 				</tnt:NavigationList>
 				<tnt:fixedItem>
 					<tnt:NavigationList id="_IDAppNavigationList1" items="{path: 'navigation>/fixedNavigation', templateShareable: false}">
-						<tnt:NavigationListItem id="_IDAppNavigationListItem2" text="{navigation>title}" icon="{navigation>icon}" ariaHasPopup="{navigation>ariaHasPopup}" design="{navigation>design}" press=".onQuickActionPress" selectable="{navigation>selectable}"/>
+						<tnt:NavigationListItem id="_IDAppNavigationListItem2" key="{navigation>key}" text="{navigation>title}" icon="{navigation>icon}" ariaHasPopup="{navigation>ariaHasPopup}" design="{navigation>design}" press=".onQuickActionPress" selectable="{navigation>selectable}"/>
 					</tnt:NavigationList>
 				</tnt:fixedItem>
 			</tnt:SideNavigation>
@@ -103,7 +86,7 @@
 							<TextArea 
 								id="_IDAppTextAreaUserPrompt" 
 								placeholder="Enter your message here" 
-								maxLength="{settings>/UserPromptMaxLength}" 
+								maxLength="{= parseInt(%{settings>/UserPromptMaxLength})}"
 								rows="5" 
 								growing="true" 
 								growingMaxLines="100" 

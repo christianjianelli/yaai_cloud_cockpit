@@ -2,7 +2,7 @@
 
 **ABAP AI Tools Cloud Cockpit**
 
-The ABAP AI Tools Cloud Cockpit is a frontend tool designed to streamline the creation and management of AI Agents using the ABAP AI Tools Cloud.
+The ABAP AI Tools Cloud Cockpit is a frontend tool designed to streamline the creation and management of AI Agents using the ABAP AI tools Cloud.
 
 ![Main View](docs/images/cockpit-main-view-screenshot.jpg)
 

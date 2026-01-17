@@ -6,8 +6,11 @@ sap.ui.define([
     "sap/m/IllustratedMessageType",
     "sap/ui/core/message/Message",
     "sap/ui/core/message/MessageType",
-    "sap/m/MessageBox"
-], (BaseController, UIComponent, Messaging, IllustratedMessage, IllustratedMessageType, Message, MessageType, MessageBox) => {
+    "sap/m/MessageBox",
+    "sap/m/Dialog",
+    "sap/m/Button",
+    "sap/m/Text"
+], (BaseController, UIComponent, Messaging, IllustratedMessage, IllustratedMessageType, Message, MessageType, MessageBox, Dialog, Button, Text) => {
     "use strict";
 
     return BaseController.extend("aaic.cockpit.controller.Chats", {
@@ -115,6 +118,248 @@ sap.ui.define([
           
         },
 
+        onBlock: async function (event) {
+
+            const view = this.getView();
+
+            const model = view.getModel("chats");
+            
+            const modelData = model.getData();
+
+            const table = view.byId("_IDChatsTable");
+
+            let selectedItems = [];
+
+            if (table) {
+                selectedItems = table.getSelectedItems();
+            }
+            
+            if (selectedItems.length === 0) {
+                return;
+            }
+
+            view.setBusy(true);
+
+            const endpoint = this.getEndpoint('chat');
+
+            for (const item of selectedItems) {
+             
+                const formData = new FormData();
+
+                // Fill form data
+                formData.append('chat_id', item.getBindingContext("chats").getProperty("id"));
+                formData.append('action', 'block');
+                            
+                try {
+
+                    // 1. Await the fetch call. This pauses execution until the response is received.
+                    const response = await fetch(endpoint, {
+                        method: 'PUT',
+                        body: formData
+                    });
+                    
+                    if (!response.ok) {
+                        // Throw an error to be caught by the catch block
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    // 2. Await the response.json() call to parse the body.
+                    const responseData = await response.json();
+
+                    // 3. Handle the successful data
+                    if (responseData.updated) {
+
+                        console.log('Chat Id ' + item.getBindingContext("chats").getProperty("id") + ' blocked. Chat Id ');
+
+                        for (const chat of modelData.chats) {
+                            
+                            if (chat.id === item.getBindingContext("chats").getProperty("id")) {
+                                
+                                chat.blocked = true;
+
+                                break;
+
+                            }
+                        }
+
+                    } else {
+
+                        const message = new Message({
+                            message: 'Chat Id ' + item.getBindingContext("chats").getProperty("id") + ' NOT blocked.',
+                            description: responseData.error,
+                            type: MessageType.Error
+                        });
+                    
+                        Messaging.addMessages(message);
+
+                    }
+        
+                } catch (error) {
+                    // 4. Handle any errors during the fetch or parsing process
+                    console.error('Block operation failed:', error);
+                }
+
+            }
+
+            model.setData(modelData);
+
+            view.setBusy(false);
+
+            if (table) {
+                table.removeSelections();
+            }
+
+        },
+
+        onRelease: async function (event) {
+
+            const view = this.getView();
+
+            const model = view.getModel("chats");
+            
+            const modelData = model.getData();
+            
+            const table = view.byId("_IDChatsTable");
+
+            let selectedItems = [];
+
+            if (table) {
+                selectedItems = table.getSelectedItems();
+            }
+            
+            if (selectedItems.length === 0) {
+                return;
+            }
+
+            view.setBusy(true);
+
+            const endpoint = this.getEndpoint('chat');
+
+            for (const item of selectedItems) {
+             
+                const formData = new FormData();
+
+                const chatId = item.getBindingContext("chats").getProperty("id");
+
+                // Fill form data
+                formData.append('chat_id', chatId);
+                formData.append('action', 'release');
+                            
+                try {
+
+                    // 1. Await the fetch call. This pauses execution until the response is received.
+                    const response = await fetch(endpoint, {
+                        method: 'PUT',
+                        body: formData
+                    });
+                    
+                    if (!response.ok) {
+                        // Throw an error to be caught by the catch block
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    // 2. Await the response.json() call to parse the body.
+                    const responseData = await response.json();
+
+                    // 3. Handle the successful data
+                    if (responseData.updated) {
+
+                        console.log('Chat Id ' + chatId + ' released. Chat Id ');
+
+                        for (const chat of modelData.chats) {
+                            
+                            if (chat.id === chatId) {
+                                
+                                chat.blocked = false;
+
+                                break;
+
+                            }
+                        }
+
+                    } else {
+
+                        const message = new Message({
+                            message: 'Chat Id ' + chatId + ' NOT released.',
+                            description: responseData.error,
+                            type: MessageType.Error
+                        });
+                    
+                        Messaging.addMessages(message);
+
+                    }
+        
+                } catch (error) {
+                    // 4. Handle any errors during the fetch or parsing process
+                    console.error('Release operation failed:', error);
+                }
+
+            }
+
+            model.setData(modelData)
+
+            view.setBusy(false);
+
+            if (table) {
+                table.removeSelections();
+            }
+
+        },
+
+        onDelete: async function (event) {
+
+            const view = this.getView();
+            
+            const resourceBundle = view.getModel("i18n").getResourceBundle();
+            
+            const table = view.byId("_IDChatsTable");
+            
+            let selectedItems = [];
+
+            if (table) {
+                selectedItems = table.getSelectedItems();
+            }
+
+            if (selectedItems.length === 0) {
+                return;
+            }
+
+            if (!this._confirmDialog) {
+                    
+                this._confirmDialog = new Dialog({
+                    id: "_IDChatsConfirmDialogDelete",
+                    type: "Message",
+                    title: resourceBundle.getText("confirm"),
+                    content: new Text({ text: resourceBundle.getText("confirmDeleteChats") }),
+                    beginButton: new Button({
+                        type: "Emphasized",
+                        text: resourceBundle.getText("yes"),
+                        press: function () {         
+                            this._confirmDialog.setBusy(true);              
+                            for (const item of selectedItems) {
+                                const chatId = item.getBindingContext("chats").getProperty("id")
+                                this._delete(chatId);
+                            }
+                            if (table) {
+                                table.removeSelections();
+                            }                           
+                            this._confirmDialog.setBusy(false);
+                            this._confirmDialog.close();
+                        }.bind(this)
+                    }),
+                    endButton: new Button({
+                        text: resourceBundle.getText("cancel"),
+                        press: function () {
+                            this._confirmDialog.close();
+                        }.bind(this)
+                    })
+                });
+            }
+
+            this._confirmDialog.open();
+
+        },
+
         //################ Private APIs ###################
 
         _loadData: async function(username = "") {
@@ -155,6 +400,70 @@ sap.ui.define([
 
             }
 
+        },
+
+        _delete: async function(id) {
+
+            const view = this.getView();
+
+            const model = view.getModel("chats");
+            
+            const modelData = model.getData();
+            
+            const endpoint = this.getEndpoint('chat');
+
+            const formData = new FormData();
+
+            // Fill form data
+            formData.append('chat_id', id);
+                        
+            try {
+
+                // 1. Await the fetch call. This pauses execution until the response is received.
+                const response = await fetch(endpoint, {
+                    method: 'DELETE',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    // Throw an error to be caught by the catch block
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // 2. Await the response.json() call to parse the body.
+                const responseData = await response.json();
+
+                // 3. Handle the successful data
+                if (responseData.deleted) {
+
+                    console.log('Chat Id ' + id + ' deleted.');
+
+                    // Remove deleted tool from the local JSON Model
+                    const chats = modelData.chats.filter((chat) => chat.id !== id );
+
+                    modelData.chats = chats;
+
+                    model.setData(modelData);
+
+                } else {
+
+                    const message = new Message({
+                        message: 'Chat Id ' + id + ' NOT deleted.',
+                        description: responseData.error,
+                        type: MessageType.Error
+                    });
+                
+                    Messaging.addMessages(message);
+
+                }
+    
+            } catch (error) {
+                
+                // 4. Handle any errors during the fetch or parsing process
+                console.error('Delete operation failed:', error);
+                
+            }
+        
         }
     });
 });

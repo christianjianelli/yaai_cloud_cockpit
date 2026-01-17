@@ -201,7 +201,7 @@ sap.ui.define([
             } 
 
 			// Create dialog lazily
-			this.DocumentVHDialog ??= await this.loadFragment({
+			this.DocumentVHDialog ??= await this.gment({
 				name: "aaic.cockpit.fragment.DocumentValueHelp",
                 controller: this
 			});
