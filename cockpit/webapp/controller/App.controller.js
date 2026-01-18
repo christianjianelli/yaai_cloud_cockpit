@@ -225,17 +225,24 @@ sap.ui.define(
 
         await new Promise(resolve => setTimeout(resolve, 300));
 
-        const button = view.byId("_IDAppButtonSend");
+        const buttonsIds = ["_IDAppButtonRefresh", "_IDAppButtonSend", "_IDAppButtonClear", "_IDAppButtonNewChat"];
 
-        button.setEnabled(false);
-
+        for (const buttonId of buttonsIds) {
+          const button = view.byId(buttonId);  
+          button.setEnabled(false);
+        }
+        
         textArea.setValue("");
 
+        textArea.fireLiveChange();
+
         // Send User Prompt
-        //Chat.sendUserPrompt(userPrompt, api, apiKey);
         await Chat.sendUserPromptAsync(userPrompt, api, apiKey, agentId);
 
-        button.setEnabled(true);
+        for (const buttonId of buttonsIds) {
+          const button = view.byId(buttonId);  
+          button.setEnabled(true);
+        }
         
       },
 
@@ -245,39 +252,7 @@ sap.ui.define(
           return;
         }
 
-        const responseData = await this._loadChatMessages();
-
-        if (!responseData.chat) {
-          return;
-        }
-
-        Chat.clear();
-
-        Chat.addWelcomeMessage();
-
-        responseData.chat.messages.forEach(message => {
-
-          const msg = JSON.parse(message.msg);
-
-          if (msg.role === 'user') {
-
-            Chat.addUserMessage(msg.content, message.seqno);
-
-          } else if (msg.role === 'assistant') {
-
-            const content = JSON.parse(msg.content);
-
-            content.forEach(element => {
-
-              if (element.type = 'text') {
-                Chat.addLlmMessage(element.text, message.seqno);
-              }
-
-            });
-
-          }
-
-        });
+        Chat.resumeChat();
 
       },
 

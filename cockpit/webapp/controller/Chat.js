@@ -286,7 +286,7 @@ sap.ui.define([
 
                 this.removeLlmTyping();
             },
-
+            
             resumeChat: async function(id = "") {
 
                 if (id !=="") {
