@@ -115,8 +115,11 @@ sap.ui.define([
                         beginButton: new Button({
                             type: "Emphasized",
                             text: resourceBundle.getText("yes"),
-                            press: function () {              
-                                view.setBusy(true);              
+                            press: function () {
+                                view.setBusy(true);
+                                if (table) {
+                                    table.removeSelections();
+                                }        
                                 this._deleteDocuments(selectedIds, view);
                                 this._confirmDialog.close();
                             }.bind(this)

@@ -110,17 +110,17 @@ sap.ui.define([
            
             const view = this.getView();
 
-            //const resourceBundle = view.getModel("i18n").getResourceBundle();
-
             const table = view.byId("_IDApiModelsTable");
 
-            const selectedItems = table.getSelectedItems();
+            let selectedItems = [];
+
+            if (table) {
+                selectedItems = table.getSelectedItems();
+            }
 
             if (selectedItems.length === 0) {
                 return;
             }
-
-            table.removeSelections();
 
             const model = view.getModel("apis");
 
@@ -135,6 +135,10 @@ sap.ui.define([
                 console.log(deletedModel);
                 models = models.filter(item => item.model !== deletedModel);
             });
+
+            if (table) {
+                table.removeSelections();
+            }
 
             modelData.apis[index].models = models;
             

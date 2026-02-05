@@ -11,7 +11,7 @@ sap.ui.define([
 
         _id: "",
 
-        _hasChanges: false,
+        _documentHasChanges: false,
 
         _edit: false,
 
@@ -50,6 +50,8 @@ sap.ui.define([
 
             this._edit = false;
 
+            this._documentHasChanges = false;
+
             const codeEditor = view.byId("_IDDocumentCodeEditor");
 
             if (codeEditor) {
@@ -84,9 +86,7 @@ sap.ui.define([
 
         onCodeEditorChange: function(event) {
 
-            this._hasChanges = true;
-
-            console.log("Code Editor content changed ...");
+            this._documentHasChanges = true;
 
         },
 
@@ -104,10 +104,11 @@ sap.ui.define([
 
             const document = {
                 description: this.getView().getBindingContext("rag").getProperty("description"),
-                keywords: this.getView().getBindingContext("rag").getProperty("keywords")
+                keywords: this.getView().getBindingContext("rag").getProperty("keywords"),
+                no_file_content: ""
             };
 
-            if (this._hasChanges === true) {
+            if (this._documentHasChanges === true) {
 
                 let filename = this.getView().getBindingContext("rag").getProperty("filename");
                 let fileContent = "";
@@ -123,6 +124,14 @@ sap.ui.define([
                     formData.append('file', fileBlob, filename);
                 }
                 
+            } else {
+
+                document.no_file_content = "X";
+
+                const fileBlob = new Blob();
+
+                formData.append('file', fileBlob, 'NONE');
+
             }
             
             // Fill form data
@@ -153,6 +162,12 @@ sap.ui.define([
 
                     MessageToast.show(resourceBundle.getText("documentUpdatedSuccessfully"));
 
+                    const model = view.getModel("rag");
+
+                    if (model) {
+                        model.commit();
+                    }
+
                 } else {
 
                     const message = new Message({
@@ -166,9 +181,6 @@ sap.ui.define([
                     this._fireMessagePopoverButtonPress(button);
 
                 }
-                
-                // Return the data if needed by the caller
-                //return responseData;
 
             } catch (error) {
                 // 4. Handle any errors during the fetch or parsing process
