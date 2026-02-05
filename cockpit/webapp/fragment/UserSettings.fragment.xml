@@ -46,7 +46,7 @@
 					id="_IDUserSettingsLabelDefaultAgent" 
 					class="sapUiSmallMarginTop"
 					labelFor="_IDUserSettingsInputMethodName" 
-					text="{i18n>promptMaxLength}">
+					text="{i18n>defaultAgent}">
 				</Label>
 				<Input
 					id="_IDUserSettingsInputDefaultAgent"

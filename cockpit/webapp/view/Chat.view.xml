@@ -5,6 +5,7 @@
     xmlns:f="sap.f"
     xmlns:l="sap.ui.layout"
     xmlns:form="sap.ui.layout.form"
+    xmlns:ce="sap.ui.codeeditor"
     xmlns="sap.m">
     <f:DynamicPage id="_IDChatDynamicPage" showFooter="true">
         <f:title>
@@ -140,6 +141,7 @@
                     <content>
                         <IconTabBar
                             id="_IDChatIconTabBar"
+                            select=".onIconTabSelect"
                             expanded="true">
                             <items>
                                 <IconTabFilter id="_IDChatIconTabFilterMessages" text="{i18n>messages}" key="messages">
@@ -281,6 +283,9 @@
                                             </ColumnListItem>
                                         </items>
                                     </Table>
+                                </IconTabFilter>
+                                <IconTabFilter id="_IDChatIconTabFilterAgentPlan" text="{i18n>agentPlan}" key="planning">
+                                    <ce:CodeEditor id="_IDChatCodeEditor" type="markdown" width="100%" height="500px" editable="false" />
                                 </IconTabFilter>
                             </items>
                         </IconTabBar>

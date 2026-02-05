@@ -324,6 +324,11 @@ sap.ui.define([
                 return;
             }
 
+            if (selectedItems.length > 1) {
+                MessageBox.information(resourceBundle.getText("multipleChatsDeletionNotAllowed"));
+                return;
+            }
+
             if (!this._confirmDialog) {
                     
                 this._confirmDialog = new Dialog({

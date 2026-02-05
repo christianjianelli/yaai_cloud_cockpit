@@ -46,9 +46,11 @@ sap.ui.define([
 
             let modelData = model.getData();
 
+            let index = -1;
+
             if (modelData.agents) {
 
-                let index = modelData.agents.findIndex( agent => agent.id === args.id );
+                index = modelData.agents.findIndex( agent => agent.id === args.id );
 
                 view.bindElement({
                     path: `/agents/${index}`,
@@ -58,7 +60,7 @@ sap.ui.define([
 
             this._id = args.id;
 
-            this._edit = false;
+            this._edit = model.hasChanges();
 
             this._setEditMode(this._edit);
 
@@ -74,8 +76,9 @@ sap.ui.define([
 
             Messaging.removeAllMessages();
 
-            this._loadData();
-
+            if (!this._edit) {
+                this._loadData();
+            }
         },
 
         onAfterRendering: function (event) {
@@ -201,7 +204,7 @@ sap.ui.define([
             } 
 
 			// Create dialog lazily
-			this.DocumentVHDialog ??= await this.gment({
+			this.DocumentVHDialog ??= await this.loadFragment({
 				name: "aaic.cockpit.fragment.DocumentValueHelp",
                 controller: this
 			});

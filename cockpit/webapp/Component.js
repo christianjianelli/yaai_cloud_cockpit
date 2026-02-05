@@ -24,6 +24,8 @@ sap.ui.define([
 
         _isDirty: false,
 
+        _skipDataLossCheck: false,
+
         _onHoldNavigation: {
             route: "",
             params: {}
@@ -160,8 +162,17 @@ sap.ui.define([
 
         },
 
+        skipDataLossCheck: function() {
+            this._skipDataLossCheck = true;
+        },
+
         preventDataLoss: function() {
 
+            if (this._skipDataLossCheck === true) {
+                this._skipDataLossCheck = false;
+                return;
+            }
+            
             const that = this;
 
             const resourceBundle = this.getModel("i18n").getResourceBundle();

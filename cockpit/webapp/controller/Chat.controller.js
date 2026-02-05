@@ -172,9 +172,59 @@ sap.ui.define([
 
         },
 
-        onRefreshChat: function() {
+        onRefreshChat: async function() {
 
-            this._loadData();
+            await this._loadData();
+
+            this.onAfterRenderingHTMLControlSD();
+
+        },
+
+        onIconTabSelect: async function(event) {
+
+            const selectedTabKey = event.getParameter("key");
+
+            if (selectedTabKey === "planning") {
+
+                const view = this.getView();
+
+                const codeEditor = view.byId("_IDChatCodeEditor");
+
+                if (codeEditor) {
+                    codeEditor.setValue("");
+                } else {
+                    return;
+                }
+
+                const model = view.getModel("chats");
+
+                const modelData = model.getData();
+
+                const index = modelData.chats.findIndex( chat => chat.id === this._id );
+
+                const planRagId = modelData.chats[index].planRagId
+
+                if (planRagId === ""){
+                    return;
+                }
+
+                const endpoint = this.getEndpoint('rag_doc');
+
+                view.setBusy(true);
+
+                const responseData = await this.fetchData(endpoint + "&id=" + planRagId);
+
+                view.setBusy(false);
+
+                if (!responseData.document.content) {
+                    return;
+                }
+
+                if (codeEditor) {
+                    codeEditor.setValue(responseData.document.content);
+                }
+
+            }
 
         },
 
@@ -198,6 +248,7 @@ sap.ui.define([
                     chatTime: responseData.chat.chatTime,
                     maxSeqNo: responseData.chat.maxSeqNo,
                     blocked: responseData.chat.blocked,
+                    planRagId: responseData.chat.planRagId,
                     messages: responseData.chat.messages,
                     log: responseData.chat.log
                 };

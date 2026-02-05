@@ -10,7 +10,8 @@ sap.ui.define([
     "sap/ui/core/message/Message",
 	"sap/ui/core/message/MessageType",
     "sap/m/MessageBox",
-], (BaseController, UIComponent, Dialog, Button, Text, IllustratedMessage, IllustratedMessageType, Messaging, Message, MessageType, MessageBox) => {
+    "sap/m/MessageToast"
+], (BaseController, UIComponent, Dialog, Button, Text, IllustratedMessage, IllustratedMessageType, Messaging, Message, MessageType, MessageBox, MessageToast) => {
     "use strict";
 
     return BaseController.extend("aaic.cockpit.controller.Tools", {
@@ -146,6 +147,101 @@ sap.ui.define([
 
         },
 
+        onAssignToAgent: async function (event) {
+
+            const view = this.getView();
+
+            const router = UIComponent.getRouterFor(this);
+
+            const ownerComponent = this.getOwnerComponent();
+
+            const resourceBundle = view.getModel("i18n").getResourceBundle();
+
+            const selectedItem = event.getParameter("selectedItem");
+
+            const agentId = selectedItem.getBindingContext("agents").getProperty("id");
+
+            await this._loadAgentData(agentId);
+
+            MessageBox.confirm(resourceBundle.getText("confirmToolAssign"), {
+				onClose: function (sAction) {
+
+                    MessageToast.show("Action selected: " + sAction);
+
+                    if (sAction !== "OK") {
+                        return;
+                    }            
+					
+                    const table = view.byId("_IDToolsTable");
+
+                    const selectedItems = table.getSelectedItems();
+
+                    if (selectedItems.length > 0) {
+
+                        const model = view.getModel("agents");
+
+                        const modelData = model.getData();
+
+                        const index = modelData.agents.findIndex( agent => agent.id === agentId );
+
+                        selectedItems.forEach(element => {
+                            modelData.agents[index].tools.push({
+                                className: element.getBindingContext("tools").getProperty("className"),
+                                methodName: element.getBindingContext("tools").getProperty("methodName"),
+                                proxyClass: element.getBindingContext("tools").getProperty("proxyClass"),
+                                description: element.getBindingContext("tools").getProperty("description")
+                            });
+                        });
+
+                        model.updateModelData(modelData);
+
+                        if (table) {
+                            table.removeSelections();
+                        }
+
+                        ownerComponent.skipDataLossCheck();
+
+                        router.navTo("RouteAgent", {id: agentId});
+
+                    }
+
+				}
+            });
+
+        },
+
+        onOpenSelectAgentDialog: async function () {
+
+            const view = this.getView();
+
+            const table = view.byId("_IDToolsTable");
+
+            const selectedItems = table.getSelectedItems();
+
+            const resourceBundle = view.getModel("i18n").getResourceBundle();
+
+            if (selectedItems.length < 1) {
+                MessageToast.show(resourceBundle.getText("noToolSelected"));
+                return;
+            }
+            
+            await this._loadAgents();
+
+			// Create dialog lazily
+			this.SelectAgentDialog ??= await this.loadFragment({
+				name: "aaic.cockpit.fragment.SelectAgentDialog",
+                controller: this
+			});
+
+			this.SelectAgentDialog.open();
+		},
+
+        onCloseSelectAgentDialog: function(event) {       
+                        
+            this.SelectAgentDialog.close();
+        
+        },
+
         onOpenDialog: async function () {
 
 			// Create dialog lazily
@@ -167,6 +263,8 @@ sap.ui.define([
 
             const view = this.getView();
 
+            const resourceBundle = view.getModel("i18n").getResourceBundle();
+
             this.Dialog.setBusy(true);
 
             const tool = {
@@ -177,9 +275,7 @@ sap.ui.define([
             };
 
             if ( tool.class_name === "" || tool.method_name === "" || tool.description === "") {
-
-                MessageBox.alert("Fill all required fields!");
-
+                MessageBox.alert(resourceBundle.getText("multipleChatsDeletionNotAllowed"));
                 return;
             }
 
@@ -356,6 +452,126 @@ sap.ui.define([
 
             view.setBusy(false);
         
+        },
+
+        _loadAgents: async function() {
+
+            const view = this.getView();
+
+            view.setBusy(true);
+         
+            const model = view.getModel("agents");
+
+            const endpoint = this.getEndpoint('agent');
+
+            try {
+          
+                const modelData = await this.fetchData(endpoint);
+
+                model.setModelData(modelData);
+
+                view.setBusy(false);
+
+            } catch (error) {
+
+                view.setBusy(false);
+
+                MessageBox.error(error.message);
+
+                const resourceBundle = view.getModel("i18n").getResourceBundle();
+
+                const message = new Message({
+                    message: error.message,
+                    description: resourceBundle.getText("communicationError"),
+                    type: MessageType.Error
+                });
+                
+                Messaging.addMessages(message);
+
+            }
+
+        },
+
+        _loadAgentData: async function(id) {
+            
+            const view = this.getView();
+
+            view.setBusy(true);
+
+            const endpoint = this.getEndpoint('agent');
+
+            let agent = {};
+
+            try {
+              
+                const responseData = await this.fetchData(endpoint + "&id=" + id);
+
+                agent = { id: responseData.agent.id,
+                          name: responseData.agent.name,
+                          description: responseData.agent.description,
+                          sysInstId: responseData.agent.sysInstId,
+                          filenameSi: responseData.agent.filenameSi,
+                          fileSiDescr: responseData.agent.fileSiDescr,
+                          ragCtxId: responseData.agent.ragCtxId,
+                          filenameCtx: responseData.agent.filenameCtx,
+                          fileCtxDescr: responseData.agent.fileCtxDescr,
+                          promptTemplate: responseData.agent.promptTemplate,
+                          tools: responseData.agent.tools,
+                          docs: responseData.agent.docs,
+                          models: responseData.agent.models  
+                    };
+
+            } catch (error) {
+
+                view.setBusy(false);
+
+                MessageBox.error(error.message);
+
+                const resourceBundle = view.getModel("i18n").getResourceBundle();
+
+                const message = new Message({
+                    message: error.message,
+                    description: resourceBundle.getText("communicationError"),
+                    type: MessageType.Error
+                });
+                
+                Messaging.addMessages(message);
+
+                return;
+            }
+
+            let model = view.getModel("agents");
+
+            let modelData = model.getData();
+
+            let index = 0;
+
+            if (!modelData.agents) {
+            
+                modelData.agents = [];
+            
+                modelData.agents.push(agent);
+            
+            } else {
+                
+                index = modelData.agents.findIndex( agent => agent.id === id );
+                
+                if(!modelData.agents[index]) {
+                   
+                    modelData.agents.push(agent);
+                
+                } else {
+                    
+                    modelData.agents[index] = agent;
+
+                }
+
+            }
+
+            model.setModelData(modelData);
+
+            view.setBusy(false);
+
         }
     });
 });

@@ -20,10 +20,10 @@
 					columns="4" 
 					selectedIndex="0"
 					select=".onApiSelect">
-					<RadioButton id="IDAddAgentModelRBOpenAI" text="{i18n>OpenAI}" />
-					<RadioButton id="IDAddAgentModelRBAnthropic" text="{i18n>Anthropic}" />
-					<RadioButton id="IDAddAgentModelRBGoogle" text="{i18n>Google}" />
-					<RadioButton id="IDAddAgentModelRBMistral" text="{i18n>Mistral}" />
+					<RadioButton id="IDAddAgentModelRBOpenAI" text="{i18n>openai}" />
+					<RadioButton id="IDAddAgentModelRBAnthropic" text="{i18n>anthropic}" />
+					<RadioButton id="IDAddAgentModelRBGoogle" text="{i18n>google}" />
+					<RadioButton id="IDAddAgentModelRBMistral" text="{i18n>mistral}" />
 				</RadioButtonGroup>
 				<Label 
 					id="_IDAddAgentModelLabelModel" 

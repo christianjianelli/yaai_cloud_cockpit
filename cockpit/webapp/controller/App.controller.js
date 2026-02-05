@@ -109,8 +109,6 @@ sap.ui.define(
 
       onItemSelect: function (event) {
 
-        const resourceBundle = this.getView().getModel("i18n").getResourceBundle();
-
         const router = UIComponent.getRouterFor(this);
 
         const ownerComponent = this.getOwnerComponent();
@@ -182,7 +180,6 @@ sap.ui.define(
           const onHoldNavigation = ownerComponent.getOnHoldNavigation();
 
           if (onHoldNavigation.route === "") {
-            //MessageToast.show(resourceBundle.getText("noNavigationtarget"));
             return;
           } 
 
@@ -378,9 +375,11 @@ sap.ui.define(
 
         const view = this.getView();
 
-        const sidePanel = view.byId("_IDAppVerticalLayoutChat");
+        const sidePanel = view.byId("_IDAppVBoxChat");
 
-        sidePanel.setBusy(true);
+        if (sidePanel) {
+          sidePanel.setBusy(true);
+        }
 
         let model = view.getModel("apis");
 
@@ -392,11 +391,15 @@ sap.ui.define(
 
           model.setModelData(modelData);
 
-          sidePanel.setBusy(false);
+          if (sidePanel) {
+            sidePanel.setBusy(false);
+          }
 
         } catch (error) {
 
-          sidePanel.setBusy(false);
+          if (sidePanel) {
+            sidePanel.setBusy(false);
+          }
 
           MessageBox.error(error.message);
 

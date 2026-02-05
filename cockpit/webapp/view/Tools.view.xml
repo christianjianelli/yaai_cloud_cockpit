@@ -73,6 +73,7 @@
                         <Title id="_IDToolsOverflowToolbarTitle" text="{i18n>tools}" level="H2"/>
                         <ToolbarSpacer id="_IDToolsOverflowToolbarToolbarSpacer"/>
                         <Button id="_IDToolsButtonAdd" icon="sap-icon://add" text="{i18n>add}" press=".onAdd"></Button>
+                        <Button id="_IDToolsButtonAssignToAgent" icon="sap-icon://connected" text="{i18n>assignToAgent}" press=".onOpenSelectAgentDialog"></Button>
                         <Button id="_IDToolsButtonDelete" icon="sap-icon://delete" text="{i18n>delete}" type="Reject" press=".onDelete"></Button>
                     </OverflowToolbar>
                 </headerToolbar>
