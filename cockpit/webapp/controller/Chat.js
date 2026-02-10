@@ -1,7 +1,8 @@
 sap.ui.define([
-    "sap/m/MessageToast"
+    "sap/m/MessageToast",
+    "sap/m/MessageBox"
 ],
-    function (MessageToast) {
+    function (MessageToast, MessageBox) {
         "use strict";
         return {
 
@@ -16,6 +17,14 @@ sap.ui.define([
             _sidePanelControl: null,
 
             _selectApiControl: null,
+
+            _resourceBundle: null,
+
+            setResourceBundle(resourceBundle) {
+
+                this._resourceBundle = resourceBundle;
+
+            },
 
             setSidePanel(control) {
 
@@ -162,7 +171,8 @@ sap.ui.define([
 
             addWelcomeMessage: function () {
 
-                this.addLlmMessage("How can I assist you today?", 999999);
+                //How can I assist you today?
+                this.addLlmMessage(this._resourceBundle.getText("greeting"), 999999);
 
             },
 
@@ -174,7 +184,8 @@ sap.ui.define([
 
                 this.addWelcomeMessage();
 
-                MessageToast.show("Chat cleared!");
+                //Chat cleared.
+                MessageToast.show(this._resourceBundle.getText("chatCleared"));
 
             },
 
@@ -227,6 +238,8 @@ sap.ui.define([
                     // Handle any errors during the fetch or parsing process
                     console.error('Operation failed:', error);
 
+                    MessageBox.error(this._resourceBundle.getText("operationFailed") + error);
+
                     return;
                     
                 }
@@ -235,52 +248,13 @@ sap.ui.define([
 
                     console.error('Operation failed!');
 
+                    MessageBox.error(this._resourceBundle.getText("operationFailed"));
+
                     return;
                 } 
 
                 // Poll for status until completed
-                let isCompleted = false;
-                let attempts = 0;
-                
-                const maxAttempts = 60; // Prevent infinite loops
-                
-                while (!isCompleted && attempts < maxAttempts) {
-                
-                    // Wait 2 seconds between checks
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    
-                    try {
-
-                        await this._loadChatMessages();
-
-                        // Check status
-                        let statusResponseData = await this._fetchData(endpoint + "&task_id=" + taskId);
-                    
-                        console.log(`Attempt ${attempts + 1}: Status is ${statusResponseData.status}`);
-                        
-                        if (statusResponseData.status.toUpperCase() === 'FINISHED') {
-                            isCompleted = true;
-                            console.log('Process completed!', statusResponseData);
-                            break;
-                        } else if (statusResponseData.status.toUpperCase() === 'FAILED') {
-                            console.error('Process failed!', statusResponseData);
-                            throw new Error('Process failed!');
-                        } else {
-                            this.addLlmTyping();
-                        }
-
-                    } catch (error) {
-                        
-                        this.removeLlmTyping();
-
-                        // Handle any errors during the fetch or parsing process
-                        console.error('Operation failed:', error);
-
-                        return;
-                    }
-                    
-                    attempts++;
-                }
+                await this._monitorAsyncExecution(taskId);
 
                 await this._loadChatMessages();
 
@@ -319,12 +293,76 @@ sap.ui.define([
                     container.innerHTML = '';    
                 }
                 
-
                 this._loadChatMessages();
 
             },
 
             //################ Private APIs ###################
+
+            _monitorAsyncExecution: async function(taskId) {
+
+                const that = this;
+
+                // Poll for status until completed
+                let isCompleted = false;
+                let attempts = 0;
+
+                let endpoint = this.getEndpoint('ASYNC_CHAT');
+                
+                const maxAttempts = 60; // Prevent infinite loops
+
+                let statusResponseData = {};
+                
+                while (!isCompleted && attempts < maxAttempts) {
+                
+                    // Wait 2 seconds between checks
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    try {
+
+                        await this._loadChatMessages();
+
+                        // Check status
+                        statusResponseData = await this._fetchData(endpoint + "&task_id=" + taskId);
+                    
+                        console.log(`Attempt ${attempts + 1}: Status is ${statusResponseData.status}`);
+                        
+                        if (statusResponseData.status.toUpperCase() === 'FINISHED') {
+                            isCompleted = true;
+                            //console.log('Process completed!', statusResponseData);
+                            break;
+                        } else if (statusResponseData.status.toUpperCase() === 'FAILED') {
+                            throw new Error('Process failed!' + statusResponseData);
+                        } else {
+                            this.addLlmTyping();
+                        }
+
+                    } catch (error) {
+                        
+                        this.removeLlmTyping();
+
+                        // Handle any errors during the fetch or parsing process
+                        console.error('Operation failed:', error);
+
+                        MessageBox.error(this._resourceBundle.getText("operationFailed") + error);
+
+                        return;
+                    }
+                    
+                    attempts++;
+
+                    if ((attempts % 10) == 0 ) {
+                        MessageToast.show(this._resourceBundle.getText("taskIsStillRunning"));
+                    }
+                }
+
+                if (statusResponseData.status.toUpperCase() === 'RUNNING') {
+                    
+                    MessageBox.information(this._resourceBundle.getText("taskIsStillRunningTimeout"));
+
+                }
+
+            },
                         
             _loadChatMessages: async function() {
 
@@ -341,12 +379,16 @@ sap.ui.define([
                     // Handle any errors during the fetch or parsing process
                     console.error('Operation failed:', error);
 
+                    MessageBox.error(this._resourceBundle.getText("operationFailed") + error);
+
                     return;
                 }
 
                 if (!responseData.chat || !responseData.chat.messages) {
 
                     console.error('No response received');
+                    
+                    MessageBox.error(this._resourceBundle.getText("operationFailed") + error);
 
                     return;
 

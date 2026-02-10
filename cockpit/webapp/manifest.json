@@ -5,7 +5,7 @@
     "type": "application",
     "i18n": "i18n/i18n.properties",
     "applicationVersion": {
-      "version": "1.0.4"
+      "version": "1.0.5"
     },
     "title": "{{appTitle}}",
     "description": "{{appDescription}}",
@@ -14,6 +14,19 @@
       "id": "@sap/generator-fiori:basic",
       "version": "1.17.0",
       "toolsId": "142ee53d-f3a8-47db-93c6-234372ea7183"
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "yaaic-manage": {
+          "semanticObject": "yaaic",
+          "action": "manage",
+          "title": "{{yaaic-manage.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
     }
   },
   "sap.ui": {

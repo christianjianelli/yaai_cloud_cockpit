@@ -200,11 +200,22 @@
                                     </Table>
                                 </IconTabFilter>
                                 <IconTabFilter id="_IDChatIconTabFilterFlow" text="{i18n>sequenceDiagram}" key="sequenceDiagram">
-                                    <core:HTML 
-                                        id="_IDChatHTMLMessagesSequenceDiagram" 
-                                        content='&lt;div id="aaic-sequence-diagram-container"&gt;&lt;/div&gt;'
-                                        afterRendering=".onAfterRenderingHTMLControlSD">
-                                    </core:HTML>  
+                                    <l:VerticalLayout id="vl1" width="100%" class="sapUiContentPadding">
+                                        <OverflowToolbar id="contentTb" design="Transparent">
+                                            <ToolbarSpacer id="_IDChatToolbarSpacerSD"/>
+                                            <Button
+                                                id="_IDChatDownloadSD"
+                                                icon="sap-icon://download"
+                                                type="Default"
+                                                text="{i18n>downloadSD}" 
+                                                press=".onGetSequenceDiagramScreenShot"/>
+			                            </OverflowToolbar>
+                                        <core:HTML 
+                                            id="_IDChatHTMLMessagesSequenceDiagram" 
+                                            content='&lt;div id="aaic-sequence-diagram-container"&gt;&lt;/div&gt;'
+                                            afterRendering=".onAfterRenderingHTMLControlSD">
+                                        </core:HTML>
+                                    </l:VerticalLayout>
                                 </IconTabFilter>
                                 <IconTabFilter id="_IDChatIconTabFilterLog" text="{i18n>log}" key="log">
                                     <Table 

@@ -96,6 +96,7 @@ sap.ui.define([
             createMermaidSequenceDiagramAnthropic: function (chat) {
 
                 const roleMap = {
+                    system: "System",
                     user: "User",
                     assistant: "Assistant"
                 };
@@ -196,6 +197,7 @@ sap.ui.define([
                             let from = roleMap[role] || role;
                             let to;
                             if (from === "User") to = "Assistant";
+                            else if (from === "System") to = "Assistant";
                             else if (from === "Assistant") to = "User";
                             let msgContent = element.text;
                             msgContent = this._escapeForMermaid(msgContent);

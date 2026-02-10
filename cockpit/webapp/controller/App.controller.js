@@ -27,6 +27,8 @@ sap.ui.define(
 
         const ownerComponent = this.getOwnerComponent();
 
+        const resourceBundle = ownerComponent.getModel("i18n").getResourceBundle();
+
         if (sideNavigation) {
           ownerComponent.setSideNavigation(sideNavigation);
         }
@@ -36,6 +38,8 @@ sap.ui.define(
         }
 
         Chat.setSidePanel(sidePanel);
+
+        Chat.setResourceBundle(resourceBundle);
 
         const model = ownerComponent.getModel("settings");
 

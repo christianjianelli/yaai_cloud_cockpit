@@ -228,6 +228,31 @@ sap.ui.define([
 
         },
 
+        onGetSequenceDiagramScreenShot: async function() {
+          
+            const element = document.getElementById('aaic-sequence-diagram-container');
+            
+            if (element) {
+
+                const view = this.getView();
+                
+                view.setBusy(true);
+
+                await html2canvas(element).then(canvas => {
+                    const link = document.createElement('a');
+                    link.href = canvas.toDataURL();
+                    link.download = this._id + '_sd.png';
+                    link.click();
+                });
+
+                view.setBusy(false);
+
+            } else {
+                console.error('Element with class "example123" not found.');
+            }
+
+        },
+
         //################ Private APIs ###################
 
         _loadData: async function() {

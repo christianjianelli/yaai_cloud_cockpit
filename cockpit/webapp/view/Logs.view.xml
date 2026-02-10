@@ -48,7 +48,7 @@
         </f:header>
         <f:content>
             <Table id="_IDLogsTable"
-                class="sapUiMediumMarginBottom"
+                class="sapUiLargeMarginBottom"
                 inset="false"
                 alternateRowColors="false"
                 popinLayout="GridSmall"

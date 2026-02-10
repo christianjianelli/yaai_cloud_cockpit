@@ -51,7 +51,7 @@
         </f:header>
         <f:content>
             <Table id="_IDToolsTable"
-                class="sapUiMediumMarginBottom"
+                class="sapUiLargeMarginBottom"
                 inset="false"
                 alternateRowColors="false"
                 popinLayout="GridSmall"
