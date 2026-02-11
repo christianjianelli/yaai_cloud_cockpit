@@ -7,6 +7,9 @@ type: application
 builder:
   resources:
     excludes:
+      - /docs/**
+      - /README.md
+      - /LICENSE
       - /test/**
       - /localService/**
   customTasks:
