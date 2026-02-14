@@ -92,19 +92,19 @@ Access all information about a chat, including:
 Messages
 
 <p style="margin-left: 50px">
-   <img src="docs/images/cockpit-chat-view-screenshot-1.jpg" alt="Chat Messages" width="500px">
+   <img src="docs/images/cockpit-chat-view-screenshot-1.jpg" alt="Chat Messages" width="600px">
 </p>
 
 Messages Sequence Diagram
 
 <p style="margin-left: 50px">
-   <img src="docs/images/cockpit-chat-view-screenshot-2.jpg" alt="Chat Messages Sequence Diagram" width="500px">
+   <img src="docs/images/cockpit-chat-view-screenshot-2.jpg" alt="Chat Messages Sequence Diagram" width="600px">
 </p>
 
 Chat Log
 
 <p style="margin-left: 50px">
-   <img src="docs/images/cockpit-chat-view-screenshot-3.jpg" alt="Chat Log Messages" width="500px">
+   <img src="docs/images/cockpit-chat-view-screenshot-3.jpg" alt="Chat Log Messages" width="600px">
 </p>
 
 ---
