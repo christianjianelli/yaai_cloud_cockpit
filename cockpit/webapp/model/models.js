@@ -15,7 +15,7 @@ sap.ui.define([
             },
 
             createNavigationModel: function () {
-                const oModel = new JSONModel(sap.ui.require.toUrl("aaic/cockpit/model/navigation.json"));
+                const oModel = new JSONModel();
                 oModel.setDefaultBindingMode("OneWay");
                 return oModel;
             },
@@ -40,7 +40,6 @@ sap.ui.define([
             },
 
             createJSONModelExt: function (mode = "TwoWay") {
-                //const oModel = new JSONModelExt(sap.ui.require.toUrl("aaic/cockpit/model/apis.json"));
                 const oModel = new JSONModelExt();
                 oModel.setDefaultBindingMode(mode);
                 return oModel;

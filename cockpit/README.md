@@ -9,10 +9,10 @@
 |**Service Type**<br>None|
 |**Service URL**<br>N/A|
 |**Module Name**<br>cockpit|
-|**Application Title**<br>App Title|
+|**Application Title**<br>ABAP AI tools Cloud Cockpit
 |**Namespace**<br>aaic|
 |**UI5 Theme**<br>sap_horizon|
-|**UI5 Version**<br>1.142.0|
+|**UI5 Version**<br>1.136.12|
 |**Enable Code Assist Libraries**<br>False|
 |**Enable TypeScript**<br>False|
 |**Add Eslint configuration**<br>False|

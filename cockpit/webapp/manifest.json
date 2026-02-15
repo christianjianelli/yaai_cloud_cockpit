@@ -5,7 +5,7 @@
     "type": "application",
     "i18n": "i18n/i18n.properties",
     "applicationVersion": {
-      "version": "1.0.5"
+      "version": "1.0.6"
     },
     "title": "{{appTitle}}",
     "description": "{{appDescription}}",
@@ -97,6 +97,13 @@
           ]
         },
         {
+          "name": "RouteApis",
+          "pattern": "apis",
+          "target": [
+            "TargetApis"
+          ]
+        },
+        {
           "name": "RouteApi",
           "pattern": "api/{id}",
           "target": [
@@ -185,6 +192,13 @@
         "TargetMain": {
           "id": "Main",
           "name": "Main"
+        },
+        "TargetApis": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Apis",
+          "viewName": "Apis"
         },
         "TargetApi": {
           "viewType": "XML",

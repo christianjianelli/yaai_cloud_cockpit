@@ -15,6 +15,7 @@
                 <f:breadcrumbs>
                     <Breadcrumbs id="_IDApiBreadcrumbs" currentLocationText="{i18n>api}">
                         <Link id="_IDApiLinkHome" text="{i18n>home}" press=".onNavBackMaster('RouteMain')"/>
+                        <Link id="_IDApiLinkApis" text="{i18n>apis}" press=".onNavBackMaster('RouteApis')"/>
                     </Breadcrumbs>
                 </f:breadcrumbs>
                 <f:actions>
@@ -22,6 +23,12 @@
                     <Button id="_IDApiButtonSave" class="sapUiTinyMarginEnd" type="Emphasized" icon="sap-icon://save" text="{i18n>save}" enabled="false" press=".onSave"/>
                 </f:actions>
                 <f:navigationActions>
+                    <Button
+                        id="_IDApisNavBack"
+                        icon="sap-icon://nav-back"
+                        type="Transparent"
+                        text="{i18n>apis}" 
+                        press=".onNavBackMaster('RouteApis')"/>
                     <Button
                         id="_IDApiNavHome"
                         icon="sap-icon://home"

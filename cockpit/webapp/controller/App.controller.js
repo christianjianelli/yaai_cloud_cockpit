@@ -59,6 +59,8 @@ sap.ui.define(
 
       onBeforeRendering() {
 
+        this._loadNavigation();
+
         this._loadApis();
         
       },
@@ -141,6 +143,10 @@ sap.ui.define(
 
           case "mistral-api":
             ownerComponent.setOnHoldNavigation("RouteApi", { id: "MISTRAL" });
+            break;
+
+          case "all-apis":
+            ownerComponent.setOnHoldNavigation("RouteApis");
             break;
 
           case "agents":
@@ -374,6 +380,94 @@ sap.ui.define(
 			},
 
       //################ Private APIs ###################
+
+      _loadNavigation: async function () {
+
+        const view = this.getView();
+
+        const resourceBundle = view.getModel("i18n").getResourceBundle();
+
+        const navigationModel = view.getModel("navigation");
+
+        const navigationData = {
+          "navigation": [
+            {
+              "title": resourceBundle.getText("home"),
+              "icon": "sap-icon://home",
+              "key": "home"
+            },
+            {
+              "title": resourceBundle.getText("LLM_APIs"),
+              "icon": "sap-icon://ai",
+              "expanded": true,
+              "key": "apis",
+              "items": [
+                {
+                  "title": "OpenAI",
+                  "key": "openai-api"
+                },
+                {
+                  "title": "Anthropic",
+                  "key": "anthropic-api"
+                },
+                {
+                  "title": "Google Gemini",
+                  "key": "google-api"
+                },
+                {
+                  "title": "Mistral",
+                  "key": "mistral-api"
+                },
+                {
+                  "title": resourceBundle.getText("allAPIs"),
+                  "key": "all-apis"
+                }
+              ]
+            },
+            {
+              "title": resourceBundle.getText("tools"),
+              "icon": "sap-icon://syntax",
+              "key": "tools"
+            },
+            {
+              "title": resourceBundle.getText("ragDocuments"),
+              "icon": "sap-icon://documents",
+              "key": "documents"
+            },
+            {
+              "title": resourceBundle.getText("agents"),
+              "icon": "sap-icon://enablement",
+              "key": "agents"
+            },
+            {
+              "title": resourceBundle.getText("chats"),
+              "icon": "sap-icon://discussion",
+              "key": "chats"
+            },
+            {
+              "title": resourceBundle.getText("logs"),
+              "icon": "sap-icon://command-line-interfaces",
+              "key": "logs"
+            },
+            {
+              "title": resourceBundle.getText("asyncTasks"),
+              "icon": "sap-icon://future",
+              "key": "async-tasks"
+            }				
+          ],
+          "fixedNavigation": [
+            {
+              "title": resourceBundle.getText("documentation"),
+              "icon": "sap-icon://learning-assistant",
+              "key": "documentation"
+            }
+          ],
+          "selectedKey": "home"
+        };
+
+        navigationModel.setData(navigationData);
+
+      },
 
       _loadApis: async function () {
 

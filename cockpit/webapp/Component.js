@@ -103,7 +103,7 @@ sap.ui.define([
 
                     var message = resourceBundle.getText("discardChangesQuestion");
                 
-                    e.returnValue = message; // Standard for most browsers
+                    //e.returnValue = message; // Standard for most browsers
                     
                     return message; // For some older browsers
                 }
