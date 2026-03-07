@@ -7,9 +7,6 @@ type: application
 builder:
   resources:
     excludes:
-      - /docs/**
-      - /README.md
-      - /LICENSE
       - /test/**
       - /localService/**
   customTasks:
@@ -18,12 +15,12 @@ builder:
       configuration:
         target:
           destination: abap-cloud-default_abap-trial-6e98d77ftrial-dev
-          url: https://302ba387-5fca-4464-ab22-8b974aaf9399.abap.ap21.hana.ondemand.com/
+          url: https://6da5c376-cfa8-4af4-913f-2061aa8356c8.abap.ap21.hana.ondemand.com/
           scp: true
         app:
           name: YAAIC_COCKPIT
           description: ABAP AI tools Cloud Cockpit
-          package: YAAIC_CLOUD_COCKPIT
+          package: YAAI_CLOUD_COCKPIT
           transport: ''
         exclude:
           - /test/

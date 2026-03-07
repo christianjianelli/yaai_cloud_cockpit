@@ -364,28 +364,24 @@ sap.ui.define([
             const apis = view.getModel("apis");
 
             let apisModelData = apis.getData();
+                
+            const endpoint = this.getEndpoint('llm_api');
+            
+            view.setBusy(true);
+            
+            apisModelData = await this.fetchData(endpoint);           
+            
+            apis.setModelData(apisModelData);
+            
+            const modelsvh = view.getModel("modelsvh");
 
-            if (!apisModelData.apis) {
-                
-                const endpoint = this.getEndpoint('llm_api');
-                
-                view.setBusy(true);
-                
-                apisModelData = await this.fetchData(endpoint);           
-                
-                apis.setModelData(apisModelData);
-                
-                const modelsvh = view.getModel("modelsvh");
+            apisModelData.apis.forEach(element => {
+                if (element.id === this._apis[this._selectedApi]) {
+                    modelsvh.setData(element);
+                }
+            });
 
-                apisModelData.apis.forEach(element => {
-                    if (element.id === this._apis[this._selectedApi]) {
-                        modelsvh.setData(element);
-                    }
-                });
-
-                view.setBusy(false);
-            }
-
+            view.setBusy(false);
 			
 		},
 
@@ -421,11 +417,13 @@ sap.ui.define([
                 for (const selectedTool of selectedTools) {
 
                     // Remove deleted tool from the local JSON Model
-                    modelData.agents[index].tools = modelData.agents[index].tools.filter((tool) => tool.className !== selectedTool.className || tool.methodName !== selectedTool.methodName );
+                    modelData.agents[index].tools = modelData.agents[index].tools.filter((tool) => !(tool.className === selectedTool.className && tool.methodName === selectedTool.methodName) );
 
                     model.updateModelData(modelData);
 
                 }
+
+                table.removeSelections();
 
             }
 
@@ -518,6 +516,9 @@ sap.ui.define([
             }
 
             const view = this.getView();
+            
+            view.byId("_IDAddAgentModelLabelTemperature").setVisible(!visibility);
+            view.byId("_IDAddAgentModelSliderTemperature").setVisible(!visibility);
 
             view.byId("_IDAddAgentModelLabelVerbosity").setVisible(visibility);
             view.byId("_IDAddAgentModelRBGVerbosity").setVisible(visibility);
@@ -546,7 +547,7 @@ sap.ui.define([
             const reasoning = ["minimal", "low", "medium", "high"];
             
             const view = this.getView();
-
+            const table = view.byId("_IDAgentModelsTable");
             const apiRBG = view.byId("_IDAddAgentModelRBGApi");
             const modelInput = view.byId("_IDAddAgentModelInputModel");
             const temperatureSlider = view.byId("_IDAddAgentModelSliderTemperature");
@@ -578,6 +579,15 @@ sap.ui.define([
             modelData.agents[index].models.push(agentModel);
 
             model.updateModelData(modelData);
+
+            apiRBG.setSelectedIndex(0)
+            modelInput.setValue("");
+            temperatureSlider.setValue(1);
+            verbosityRBG.setSelectedIndex(0);
+            reasoningRBG.setSelectedIndex(0);
+            maxToolCallsSlider.setValue(5);
+            
+            table.removeSelections();
 
             this.AddModelDialog.close();
 

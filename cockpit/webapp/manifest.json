@@ -5,7 +5,7 @@
     "type": "application",
     "i18n": "i18n/i18n.properties",
     "applicationVersion": {
-      "version": "1.0.6"
+      "version": "1.0.8"
     },
     "title": "{{appTitle}}",
     "description": "{{appDescription}}",
@@ -17,10 +17,10 @@
     },
     "crossNavigation": {
       "inbounds": {
-        "yaaic-manage": {
-          "semanticObject": "yaaic",
+        "yaai_cloud-manage": {
+          "semanticObject": "yaai_cloud",
           "action": "manage",
-          "title": "{{yaaic-manage.flpTitle}}",
+          "title": "{{yaai_cloud-manage.flpTitle}}",
           "signature": {
             "parameters": {},
             "additionalParameters": "allowed"

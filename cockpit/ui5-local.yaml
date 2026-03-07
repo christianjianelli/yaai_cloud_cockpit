@@ -30,7 +30,7 @@ server:
       configuration:
         ignoreCertError: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
         backend:
-          - url: https://302ba387-5fca-4464-ab22-8b974aaf9399.abap-web.ap21.hana.ondemand.com/
+          - url: https://6da5c376-cfa8-4af4-913f-2061aa8356c8.abap-web.ap21.hana.ondemand.com/
             authenticationType: OAuth2UserTokenExchange
             destination: abap-cloud-default_abap-trial-6e98d77ftrial-dev
             path: /sap

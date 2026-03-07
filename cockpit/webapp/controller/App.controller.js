@@ -53,7 +53,7 @@ sap.ui.define(
           Chat.agentId = modelData.DefaultAgentId;
         }
 
-        this._loadUserInfo();
+        //this._loadUserInfo();
 
       },
 
@@ -549,6 +549,7 @@ sap.ui.define(
 
       _loadUserInfo: async function () {
         
+        /*
         const userInfo = await this.fetchData('/sap/bc/ui2/start_up');
 
         const view = this.getView();
@@ -561,6 +562,7 @@ sap.ui.define(
           userid: userInfo.id,
           initials: userInfo.email.slice(0, 2).toUpperCase()
         });
+        */
 
       }
        

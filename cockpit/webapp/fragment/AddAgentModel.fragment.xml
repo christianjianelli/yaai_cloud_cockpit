@@ -46,7 +46,8 @@
 				<Label 
 					id="_IDAddAgentModelLabelTemperature" 
 					labelFor="_IDAddAgentModelSliderTemperature" 
-					text="{i18n>temperature}">
+					text="{i18n>temperature}"
+					visible="false">
 				</Label>
 				<Slider 
 					id="_IDAddAgentModelSliderTemperature" 
@@ -54,6 +55,7 @@
 					showAdvancedTooltip="true" 
 					showHandleTooltip="false" 
 					enableTickmarks="true" 
+					visible="false"
 					min="0" 
 					max="2" 
 					step="0.1" 
