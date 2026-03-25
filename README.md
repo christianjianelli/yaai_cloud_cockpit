@@ -136,9 +136,12 @@ All chats and tasks executed by AI Agents run as asynchronous processes. In this
 
 ### Prerequisites
 
-The ABAP Cloud system must have the following packages installed:
+The ABAP Cloud system must have the following packages installed and configured:
 
  - **[ABAP AI tools Cloud](https://github.com/christianjianelli/yaai_cloud)**
+   - Installation: https://github.com/christianjianelli/yaai_cloud/blob/main/docs/installation.md
+   - Configuration: https://github.com/christianjianelli/yaai_cloud/blob/main/docs/configuration.md
+ 
  - **[ABAP AI tools Cloud REST API](https://github.com/christianjianelli/yaai_cloud_rest)**
 
 ### Installation Steps
@@ -169,4 +172,6 @@ The ABAP Cloud system must have the following packages installed:
       <img src="docs/images/destination.png" alt="Destination Name" width="500px">
    </p>
  
- 3 - Deploy the Application. See the Business Application Documentation: https://help.sap.com/docs/bas/developing-sap-fiori-app-in-sap-business-application-studio/deploying-application?locale=en-US
+ 3 - Deploy the Application: 
+   - Business Application Documentation: https://help.sap.com/docs/bas/developing-sap-fiori-app-in-sap-business-application-studio/deploying-application?locale=en-US
+   - Tutorial: https://developers.sap.com/tutorials/abap-environment-deploy-cf-production..html
