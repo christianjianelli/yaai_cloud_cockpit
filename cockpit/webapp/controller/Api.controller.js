@@ -326,6 +326,10 @@ sap.ui.define([
                 
                     MessageToast.show(resourceBundle.getText('changesSaved'));
 
+                    if (model) {
+                        model.commit();
+                    }
+
                 }
 
                 view.setBusy( false );

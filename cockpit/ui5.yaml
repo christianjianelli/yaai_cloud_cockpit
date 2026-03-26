@@ -18,7 +18,7 @@ server:
         backend:
           - url: https://6da5c376-cfa8-4af4-913f-2061aa8356c8.abap-web.ap21.hana.ondemand.com/
             authenticationType: OAuth2UserTokenExchange
-            destination: abap-cloud-default_abap-trial-6e98d77ftrial-dev
+            destination: abap-cloud-default_abap-trial-a3ca07edtrial-dev
             path: /sap
     - name: fiori-tools-appreload
       afterMiddleware: compression
