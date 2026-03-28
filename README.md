@@ -175,3 +175,8 @@ The ABAP Cloud system must have the following packages installed and configured:
  3 - Deploy the Application: 
    - Business Application Documentation: https://help.sap.com/docs/bas/developing-sap-fiori-app-in-sap-business-application-studio/deploying-application?locale=en-US
    - Tutorial: https://developers.sap.com/tutorials/abap-environment-deploy-cf-production..html
+
+
+## Guides
+
+- [How to Create and Test AI Agents in the ABAP AI tools Cloud Cockpit](./docs/guides/create-and-test-ai-agents.md)
