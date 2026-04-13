@@ -188,13 +188,7 @@ sap.ui.define([
 
                 const view = this.getView();
 
-                const codeEditor = view.byId("_IDChatCodeEditor");
-
-                if (codeEditor) {
-                    codeEditor.setValue("");
-                } else {
-                    return;
-                }
+                document.getElementById('aaic-agent-plan-container').innerHTML = '';
 
                 const model = view.getModel("chats");
 
@@ -220,10 +214,8 @@ sap.ui.define([
                     return;
                 }
 
-                if (codeEditor) {
-                    codeEditor.setValue(responseData.document.content);
-                }
-
+                document.getElementById('aaic-agent-plan-container').innerHTML = window.marked.parse(responseData.document.content);
+                
             }
 
         },

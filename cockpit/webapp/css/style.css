@@ -2,3 +2,23 @@
 .remainingLength {
 	color: #d4d4d4;
 }
+
+#aaic-agent-plan-container table,
+#aaic-chat-container table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  display: block;
+  overflow-x: auto;
+}
+
+#aaic-agent-plan-container th,
+#aaic-chat-container th,
+#aaic-agent-plan-container td,
+#aaic-chat-container td {
+  border: 1px solid #666666;
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;
+}

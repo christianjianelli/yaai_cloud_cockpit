@@ -93,7 +93,7 @@
 				<Label 
 					id="_IDAddAgentModelLabelMaxToolCalls" 
 					labelFor="_IDAddAgentModelSliderMaxToolCalls" 
-					text="{i18n>maxToolCalls}">
+					text="{i18n>maxToolCalls0Unlimited}">
 				</Label>
 				<Slider 
 					id="_IDAddAgentModelSliderMaxToolCalls" 
