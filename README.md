@@ -8,6 +8,57 @@ The ABAP AI tools Cloud Cockpit is a frontend tool designed to streamline the cr
 
 ---
 
+## Installation
+
+### Prerequisites
+
+The ABAP Cloud system must have the following packages installed and configured:
+
+ - **[ABAP AI tools Cloud](https://github.com/christianjianelli/yaai_cloud)**
+   - Installation: https://github.com/christianjianelli/yaai_cloud/blob/main/docs/installation.md
+   - Configuration: https://github.com/christianjianelli/yaai_cloud/blob/main/docs/configuration.md
+ 
+ - **[ABAP AI tools Cloud REST API](https://github.com/christianjianelli/yaai_cloud_rest)**
+
+### Installation Steps
+
+ 1 - Clone the [ABAP AI tools Cloud repository](https://github.com/christianjianelli/yaai_cloud_cockpit) in your Business Application Studio development environment. 
+
+   This tutorial explains how to do it: https://developers.sap.com/tutorials/build-code-simple-git..html
+ 
+ 2 - Adjust the backend URL and the destination name in the `ui5-local.yaml` and `ui5.yaml` files.
+
+   <p style="margin-left: 50px">
+      <img src="docs/images/yaml.png" alt="ABAP Backend URL" width="500px">
+   </p>
+
+   To find the backend URL go to the Subaccount: trial -> Instances and Subscriptions.
+
+   <p style="margin-left: 50px">
+      <img src="docs/images/instances.png" alt="ABAP Backend URL" width="500px">
+   </p>
+   
+   <p style="margin-left: 50px">
+      <img src="docs/images/backend-URL.png" alt="Adjust .yaml files" width="500px">
+   </p>
+
+   To find the destination name go to Subaccount: trial - Destinations. 
+
+   <p style="margin-left: 50px">
+      <img src="docs/images/destination.png" alt="Destination Name" width="500px">
+   </p>
+ 
+ 3 - Deploy the Application: 
+   - Business Application Documentation: https://help.sap.com/docs/bas/developing-sap-fiori-app-in-sap-business-application-studio/deploying-application?locale=en-US
+   - Tutorial: https://developers.sap.com/tutorials/abap-environment-deploy-cf-production..html
+
+
+## Guides
+
+- [How to Create and Test AI Agents in the ABAP AI tools Cloud Cockpit](./docs/guides/create-and-test-ai-agents.md)
+
+---
+
 ## Main Features
 
 ### LLM APIs
@@ -130,53 +181,3 @@ All chats and tasks executed by AI Agents run as asynchronous processes. In this
    <img src="docs/images/cockpit-async-tasks-view-screenshot.jpg" alt="Async Tasks View" width="600px">
 </p>
 
----
-
-## Installation
-
-### Prerequisites
-
-The ABAP Cloud system must have the following packages installed and configured:
-
- - **[ABAP AI tools Cloud](https://github.com/christianjianelli/yaai_cloud)**
-   - Installation: https://github.com/christianjianelli/yaai_cloud/blob/main/docs/installation.md
-   - Configuration: https://github.com/christianjianelli/yaai_cloud/blob/main/docs/configuration.md
- 
- - **[ABAP AI tools Cloud REST API](https://github.com/christianjianelli/yaai_cloud_rest)**
-
-### Installation Steps
-
- 1 - Clone the [ABAP AI tools Cloud repository](https://github.com/christianjianelli/yaai_cloud_cockpit) in your Business Application Studio development environment. 
-
-   This tutorial explains how to do it: https://developers.sap.com/tutorials/build-code-simple-git..html
- 
- 2 - Adjust the backend URL and the destination name in the `ui5-local.yaml` and `ui5.yaml` files.
-
-   <p style="margin-left: 50px">
-      <img src="docs/images/yaml.png" alt="ABAP Backend URL" width="500px">
-   </p>
-
-   To find the backend URL go to the Subaccount: trial -> Instances and Subscriptions.
-
-   <p style="margin-left: 50px">
-      <img src="docs/images/instances.png" alt="ABAP Backend URL" width="500px">
-   </p>
-   
-   <p style="margin-left: 50px">
-      <img src="docs/images/backend-URL.png" alt="Adjust .yaml files" width="500px">
-   </p>
-
-   To find the destination name go to Subaccount: trial - Destinations. 
-
-   <p style="margin-left: 50px">
-      <img src="docs/images/destination.png" alt="Destination Name" width="500px">
-   </p>
- 
- 3 - Deploy the Application: 
-   - Business Application Documentation: https://help.sap.com/docs/bas/developing-sap-fiori-app-in-sap-business-application-studio/deploying-application?locale=en-US
-   - Tutorial: https://developers.sap.com/tutorials/abap-environment-deploy-cf-production..html
-
-
-## Guides
-
-- [How to Create and Test AI Agents in the ABAP AI tools Cloud Cockpit](./docs/guides/create-and-test-ai-agents.md)
