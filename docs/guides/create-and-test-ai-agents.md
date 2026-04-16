@@ -8,10 +8,10 @@ The cockpit organizes agent work into these areas:
 
 - `LLM APIs`: maintain provider endpoints and registered models
 - `Tools`: register ABAP class methods that agents can call
-- `Documents (RAG)`: upload markdown files for system instructions or context
+- `Documents (RAG)`: upload markdown files for system instructions, tools documentation, additional context, etc
 - `Agents`: create and configure the agent itself
-- `Chats`: inspect message history, tool calls, sequence diagrams and logs
-- `Logs`: review system-wide log messages
+- `Chats`: test agents and inspect messages, tool calls, sequence diagrams and logs
+- `Logs`: review log messages
 - `Async Tasks`: monitor background execution status
 
 Typical flow:
@@ -19,10 +19,10 @@ Typical flow:
 1. Configure an LLM API and its models.
 2. Configure the tools the agent will use.
 3. Upload markdown documents for instructions and context.
-4. Create the agent record.
-5. Assign tools, documents, and one or more models to the agent.
+4. Create the agent.
+5. Assign tools, documents, and a LLM model to the agent.
 6. Test the agent from the integrated chat.
-7. Review the resulting chat, logs, and async task execution.
+7. Review the resulting chat, messages, sequence diagram, logs, and async task execution.
 
 ## 1. Configure LLM APIs
 
@@ -34,13 +34,11 @@ You can maintain:
 - the list of available models
 - the default model for that provider
 
-The API detail screen also lets you add or remove models and mark exactly one model as the default.
-
-![API configuration example](../images/cockpit-api-view-openai-screenshot.jpg)
+![API configuration example](../images/screenshot-cockpit-api.jpg)
 
 Use this step first so the agent model assignment can later suggest valid model names.
 
-## 2. Create or Verify Tools
+## 2. Configure Tools
 
 Open `Tools` to manage the function-calling tools available to agents.
 
@@ -59,9 +57,11 @@ Recommendation:
 
 - Keep descriptions task-oriented so the LLM can choose the correct tool.
 - Assign to the agent only the tools it really needs.
-- Use a `Proxy Class` when your ABAP implementation needs data type conversions that the LLM may struggle to perform on its own.
+- Use a `Proxy Class` when your ABAP implementation requires data type conversions that the LLM may not handle reliably on its own. 
 
-## 3. Upload Documents for Instructions and RAG
+> A `Proxy Class` method typically has the same parameters as the concrete method, but uses generic types such as strings. The proxy class performs the necessary data type conversions first, and then calls the concrete method.
+
+## 3. Upload Documents for Instructions and RAG (Retrieval-Augmented Generation)
 
 Open `Documents (RAG)` to upload markdown files.
 
@@ -71,20 +71,21 @@ The upload dialog supports:
 - `Keywords`
 - `File`
 
-The file uploader only accepts `.md` files.
+The file uploader only accepts `.md` (markdown) files.
 
-Two document types are especially relevant for agents:
+Three document types are especially relevant for agents:
 
-- `System instructions`: the document that defines the agent role and behavior
-- `RAG/context`: supporting knowledge the model should use during execution
+- `System instructions`: define the agent’s role and behavior
+- `Tool usage guides`: explain how the agent should use available tools
+- `RAG/context`: provide supporting knowledge the model should reference during execution
 
 ![Documents view](./images/documents.jpg)
 
 Practical guidance:
 
 - Put stable behavioral rules in the system-instructions document.
+- Put explicit instructions for tool invocation in the tool usage guide, including when to use each tool, required inputs, expected outputs, and concrete examples.
 - Put domain knowledge, reference content, or business facts in the RAG document.
-- Use searchable keywords so documents are easier to find later.
 
 ## 4. Create the Agent
 
@@ -126,13 +127,14 @@ The table shows:
 - `Description`
 - `Load on Demand`
 
-`Load on Demand` is useful when you do not want every tool to be exposed immediately. The agent can then load tools only when needed, and those loaded tools later appear in the chat analysis screen. This functionality requires assignment of the tools `YCL_AAIC_FUNC_CALL_TOOLS GET_AVAILABLE_TOOLS` and `YCL_AAIC_FUNC_CALL_TOOLS REQUEST_TOOLS` so the agent can get the list of available tools and request the tools it needs. These two tools must not be flagged to be loaded on demand. They must be immediately available to the agent. 
+`Load on Demand` is useful when you do not want every tool to be exposed immediately. The agent can then load tools only when needed, and those loaded tools later appear in the chat analysis screen. To enable this functionality, assign the tools `YCL_AAIC_FUNC_CALL_TOOLS GET_AVAILABLE_TOOLS` and `YCL_AAIC_FUNC_CALL_TOOLS REQUEST_TOOLS`. This allows the agent to retrieve the list of available tools and request the specific tools it needs.
+These two tools must not be configured for on-demand loading. They need to be immediately available to the agent. 
 
 ### Assign documents
 
 In the `Documents` section, use `Add` to attach additional RAG documents to the agent.
 
-This is separate from the main `File Context (RAG)` field and allows the agent to have a broader set of supporting documents. This functionality requires assignment of the tools `YCL_AAIC_RAG_TOOLS GET_LIST_OF_DOCUMENTS` and `YCL_AAIC_RAG_TOOLS GET_DOCUMENTATION` so the agent can get the list of available documents and request the documents it needs.
+These documents expand the agent’s access to supporting knowledge. This functionality requires assignment of the tools `YCL_AAIC_RAG_TOOLS GET_LIST_OF_DOCUMENTS` and `YCL_AAIC_RAG_TOOLS GET_DOCUMENTATION`. This allows the agent to retrieve the list of available documents and request the specific documents it needs. These two tools must not be configured for on-demand loading. They need to be immediately available to the agent. 
 
 ### Assign models
 
@@ -143,8 +145,8 @@ The model dialog supports:
 - `API`
 - `Model`
 - `Temperature` for non-OpenAI providers
-- `Verbosity` for OpenAI
-- `Reasoning Effort` for OpenAI
+- `Verbosity` (OpenAI only)
+- `Reasoning Effort` (OpenAI only)
 - `Max Tool Calls`
 
 ![Agent tools, documents, and models](./images/agent_cont.jpg)
@@ -204,44 +206,4 @@ If a response is delayed or incomplete, check:
 
 - `Async Tasks` to see whether the background task is still running, finished, or failed
 - `Logs` for system-wide messages and errors
-- `Chats` for the exact message and tool-call history
-
-This is important because chat execution in the cockpit runs asynchronously.
-
-## Recommended End-to-End Procedure
-
-Use this sequence when setting up a new agent:
-
-1. Maintain the provider base URL and model list in `LLM APIs`.
-2. Register the necessary ABAP tools in `Tools`.
-3. Upload system-instructions and context documents in `Documents (RAG)`.
-4. Create the agent in `Agents`.
-5. Edit the agent and assign:
-   - the system-instructions document
-   - the RAG/context document
-   - tools
-   - one or more models
-6. Save the agent.
-7. Test it from the integrated chat on the agent page.
-8. Validate behavior in `Chats`, especially `Messages`, `Sequence Diagram`, and `Log`.
-9. Use `Async Tasks` and `Logs` if execution does not behave as expected.
-
-## Tips for Better Agent Quality
-
-- Use concise, explicit system instructions in markdown.
-- Give each tool a description that makes its purpose unambiguous.
-- Limit the tool set to what the agent should actually use.
-- Attach RAG documents only when they add information the model is unlikely to know.
-- Test with both simple prompts and realistic business prompts.
-- Inspect the sequence diagram to verify whether the tool-calling flow matches your expectation.
-
-## Summary
-
-The cockpit supports the full lifecycle of agent setup:
-
-- provider and model configuration
-- tool registration
-- markdown document management
-- agent composition
-- live testing through the integrated chat
-- post-run analysis through chats, logs, and async task monitoring
+- `Messages` for the exact message and tool-calls
