@@ -21,7 +21,7 @@ The ABAP Cloud system must have the following packages installed and configured:
  - **[ABAP AI tools Cloud REST API](https://github.com/christianjianelli/yaai_cloud_rest)**
 
 ### Installation Steps
-
+ 
  1 - Clone the [ABAP AI tools Cloud repository](https://github.com/christianjianelli/yaai_cloud_cockpit) in your Business Application Studio development environment. 
 
    This tutorial explains how to do it: https://developers.sap.com/tutorials/build-code-simple-git..html
@@ -49,9 +49,11 @@ The ABAP Cloud system must have the following packages installed and configured:
    </p>
  
  3 - Deploy the Application: 
+
+   > **Important:** The cockpit is designed to be used as a standalone application, not inside the SAP Fiori Launchpad.
+
    - Business Application Documentation: https://help.sap.com/docs/bas/developing-sap-fiori-app-in-sap-business-application-studio/deploying-application?locale=en-US
    - Tutorial: https://developers.sap.com/tutorials/abap-environment-deploy-cf-production..html
-
 
 ## Guides
 
