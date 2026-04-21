@@ -245,6 +245,36 @@ sap.ui.define([
 
         },
 
+        onPrintAgentPlan: function (event) {
+
+            const view = this.getView();
+
+            const resourceBundle = view.getModel("i18n").getResourceBundle();
+
+            const printWindow = window.open("", "_blank");
+
+            const plan = document.getElementById('aaic-agent-plan-container').innerHTML;
+
+            const title = resourceBundle.getText("agentPlan");
+
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>${title}</title>
+                </head>
+                <body>
+                    ${plan}
+                </body>
+                </html>
+            `);
+
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+
+        },
+
         //################ Private APIs ###################
 
         _loadData: async function() {
