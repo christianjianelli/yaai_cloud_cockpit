@@ -192,7 +192,7 @@ sap.ui.define([
             getEndpoint: function (resource) {
 
 				let baseUrl = '/sap/bc/http/sap/YAAIC_HTTP_REST_HANDLER/';
-				let urlParams = '?sap-client=100&r=' + Date.now();
+				let urlParams = '?r=' + Date.now();
 
 				return baseUrl + resource + urlParams;
 
