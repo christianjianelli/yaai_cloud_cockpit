@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/github/license/christianjianelli/yaai_cloud_cockpit)](https://github.com/christianjianelli/yaai_cloud_cockpit/blob/main/LICENSE)
+
 # ABAP AI tools Cloud Cockpit
 
 The ABAP AI tools Cloud Cockpit is a frontend tool designed to streamline the creation and management of AI Agents using the ABAP AI tools Cloud.
